@@ -1,0 +1,575 @@
+=== ANALISIS TEMPLATE EXCEL ===
+
+Jumlah Sheet: 5
+Nama Sheet: rekap absensi seluruhnya, Juli, Keterlambatan, Data Murid, Sheet1
+
+================================================================================
+SHEET 1: rekap absensi seluruhnya
+================================================================================
+Highest Row: 1289
+Highest Column: AA (Index: 27)
+
+--- STYLING ANALYSIS (Sample) ---
+--- MERGED CELLS ---
+Merged: A1080:T1080
+Merged: A1122:T1122
+Merged: A1164:T1164
+Merged: A1206:T1206
+Merged: A1248:T1248
+Merged: A870:T870
+Merged: A912:T912
+Merged: A954:T954
+Merged: A996:T996
+Merged: A1038:T1038
+Merged: A780:T780
+Merged: A738:T738
+Merged: A696:T696
+Merged: A654:T654
+Merged: A486:T486
+Merged: A612:T612
+Merged: A528:T528
+Merged: A570:T570
+Merged: A229:T229
+Merged: A271:T271
+Merged: A313:T313
+Merged: A355:T355
+Merged: A397:T397
+Merged: A19:T19
+Merged: A61:T61
+Merged: A103:T103
+Merged: A145:T145
+Merged: A187:T187
+Merged: E440:E442
+Merged: F440:F442
+Merged: A868:A869
+Merged: B868:B869
+Merged: A442:A443
+Merged: B442:B443
+Merged: A866:A867
+Merged: C866:C869
+Merged: D866:D869
+Merged: E866:E868
+Merged: F866:F868
+Merged: A440:A441
+Merged: C440:C443
+Merged: D440:D443
+Merged: A444:T444
+Merged: A822:T822
+Merged: E1:S1
+Merged: E2:S2
+Merged: E3:S3
+Merged: E4:S4
+Merged: E6:S6
+Merged: E7:S7
+Merged: A12:C12
+Merged: Q14:Q16
+Merged: R14:R16
+Merged: S14:S16
+Merged: A14:A15
+Merged: C14:C17
+Merged: D14:D17
+Merged: E14:E16
+Merged: F14:F16
+Merged: G14:G16
+Merged: H14:H16
+Merged: A16:A17
+Merged: B16:B17
+Merged: T14:T16
+Merged: I14:I16
+Merged: J14:J16
+Merged: K14:K16
+Merged: M14:M16
+Merged: N14:N16
+Merged: O14:O16
+Merged: P14:P16
+Merged: T440:T442
+Merged: G440:G442
+Merged: H440:H442
+Merged: I440:I442
+Merged: J440:J442
+Merged: K440:K442
+Merged: M440:M442
+Merged: N440:N442
+Merged: O440:O442
+Merged: P440:P442
+Merged: Q440:Q442
+Merged: R440:R442
+Merged: S440:S442
+Merged: T866:T868
+Merged: G866:G868
+Merged: H866:H868
+Merged: I866:I868
+Merged: J866:J868
+Merged: K866:K868
+Merged: M866:M868
+Merged: N866:N868
+Merged: O866:O868
+Merged: P866:P868
+Merged: Q866:Q868
+Merged: R866:R868
+Merged: S866:S868
+
+--- DATA STRUCTURE (First 100 rows) ---
+Row 1: E: PEMERINTAH PROVINSI JAWA TIMUR
+Row 2: E: DINAS PENDIDIKAN
+Row 3: E: SEKOLAH MENENGAH ATAS NEGERI 21 SURABAYA
+Row 4: E: Jl. Argopuro 11-15 Surabaya Telp. 031-5350753 Fax. 031-5341530
+Row 6: E: DAFTAR KETERLAMBATAN SISWA 
+Row 7: E: ="Tahun Pelajaran "&MID(D12,3,9)
+Row 12: A: Tahun Pelajaran  | D: =": "&INDIRECT("'Keterlambatan'!A3")
+Row 14: A: NO | C: NAMA LENGKAP | D: JK  | E: ="JULI                        "&LEFT(MID(D12,3,9), | F: ="AGUSTUS                        "&LEFT(MID(D12,3, | G: ="SEPTEMBER                        "&LEFT(MID(D12, | H: ="OKTOBER                        "&LEFT(MID(D12,3, | I: ="NOVEMBER                        "&LEFT(MID(D12,3 | J: ="DESEMBER                        "&LEFT(MID(D12,3 | K: JUMLAH  SEMESTER 1 | M: ="JANUARI                 "&RIGHT(MID(D12,3,9),4) | N: ="FEBRUARI                 "&RIGHT(MID(D12,3,9),4) | O: ="MARET                 "&RIGHT(MID(D12,3,9),4) | P: ="APRIL                 "&RIGHT(MID(D12,3,9),4) | Q: ="MEI               "&RIGHT(MID(D12,3,9),4) | R: ="JUNI                 "&RIGHT(MID(D12,3,9),4) | S: JUMLAH  SEMESTER 2 | T: JUMLAH  AKUMULASI 2 SEMESTER 
+Row 16: A: Urut | B: NIS
+Row 17: E: H | F: H | G: H | H: H | I: H | J: H | K: H | M: H | N: H | O: H | P: H | Q: H | R: H | S: H | T: H
+Row 19: A: ="Kelas X-1     (" & TRIM(INDEX(INDIRECT("'Data Mu
+Row 20: A: 1 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A8))="", "", I | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B8))="", "", I | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C8))="", "", L | K: =SUM(E20:J20) | S: =SUM(M20:R20) | T: =K20+S20 | U:  
+Row 21: A: 2 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A9))="", "", I | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B9))="", "", I | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C9))="", "", L | K: =SUM(E21:J21) | S: =SUM(M21:R21) | T: =K21+S21
+Row 22: A: 3 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A10))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B10))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C10))="", "",  | K: =SUM(E22:J22) | S: =SUM(M22:R22) | T: =K22+S22
+Row 23: A: 4 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A11))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B11))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C11))="", "",  | K: =SUM(E23:J23) | S: =SUM(M23:R23) | T: =K23+S23
+Row 24: A: 5 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A12))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B12))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C12))="", "",  | K: =SUM(E24:J24) | S: =SUM(M24:R24) | T: =K24+S24
+Row 25: A: 6 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A13))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B13))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C13))="", "",  | K: =SUM(E25:J25) | S: =SUM(M25:R25) | T: =K25+S25
+Row 26: A: 7 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A14))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B14))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C14))="", "",  | K: =SUM(E26:J26) | S: =SUM(M26:R26) | T: =K26+S26
+Row 27: A: 8 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A15))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B15))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C15))="", "",  | K: =SUM(E27:J27) | S: =SUM(M27:R27) | T: =K27+S27
+Row 28: A: 9 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A16))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B16))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C16))="", "",  | K: =SUM(E28:J28) | S: =SUM(M28:R28) | T: =K28+S28
+Row 29: A: 10 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A17))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B17))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C17))="", "",  | K: =SUM(E29:J29) | S: =SUM(M29:R29) | T: =K29+S29
+Row 30: A: 11 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A18))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B18))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C18))="", "",  | K: =SUM(E30:J30) | S: =SUM(M30:R30) | T: =K30+S30
+Row 31: A: 12 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A19))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B19))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C19))="", "",  | K: =SUM(E31:J31) | S: =SUM(M31:R31) | T: =K31+S31
+Row 32: A: 13 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A20))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B20))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C20))="", "",  | K: =SUM(E32:J32) | S: =SUM(M32:R32) | T: =K32+S32
+Row 33: A: 14 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A21))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B21))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C21))="", "",  | K: =SUM(E33:J33) | S: =SUM(M33:R33) | T: =K33+S33
+Row 34: A: 15 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A22))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B22))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C22))="", "",  | K: =SUM(E34:J34) | S: =SUM(M34:R34) | T: =K34+S34
+Row 35: A: 16 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A23))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B23))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C23))="", "",  | K: =SUM(E35:J35) | S: =SUM(M35:R35) | T: =K35+S35
+Row 36: A: 17 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A24))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B24))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C24))="", "",  | K: =SUM(E36:J36) | S: =SUM(M36:R36) | T: =K36+S36
+Row 37: A: 18 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A25))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B25))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C25))="", "",  | K: =SUM(E37:J37) | S: =SUM(M37:R37) | T: =K37+S37
+Row 38: A: 19 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A26))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B26))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C26))="", "",  | K: =SUM(E38:J38) | S: =SUM(M38:R38) | T: =K38+S38
+Row 39: A: 20 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A27))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B27))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C27))="", "",  | K: =SUM(E39:J39) | S: =SUM(M39:R39) | T: =K39+S39
+Row 40: A: 21 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A28))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B28))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C28))="", "",  | K: =SUM(E40:J40) | S: =SUM(M40:R40) | T: =K40+S40
+Row 41: A: 22 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A29))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B29))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C29))="", "",  | K: =SUM(E41:J41) | S: =SUM(M41:R41) | T: =K41+S41
+Row 42: A: 23 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A30))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B30))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C30))="", "",  | K: =SUM(E42:J42) | S: =SUM(M42:R42) | T: =K42+S42
+Row 43: A: 24 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A31))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B31))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C31))="", "",  | K: =SUM(E43:J43) | S: =SUM(M43:R43) | T: =K43+S43
+Row 44: A: 25 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A32))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B32))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C32))="", "",  | K: =SUM(E44:J44) | S: =SUM(M44:R44) | T: =K44+S44
+Row 45: A: 26 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A33))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B33))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C33))="", "",  | K: =SUM(E45:J45) | S: =SUM(M45:R45) | T: =K45+S45
+Row 46: A: 27 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A34))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B34))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C34))="", "",  | K: =SUM(E46:J46) | S: =SUM(M46:R46) | T: =K46+S46
+Row 47: A: 28 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A35))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B35))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C35))="", "",  | K: =SUM(E47:J47) | S: =SUM(M47:R47) | T: =K47+S47
+Row 48: A: 29 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A36))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B36))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C36))="", "",  | K: =SUM(E48:J48) | S: =SUM(M48:R48) | T: =K48+S48
+Row 49: A: 30 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A37))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B37))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C37))="", "",  | K: =SUM(E49:J49) | S: =SUM(M49:R49) | T: =K49+S49
+Row 50: A: 31 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A38))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B38))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C38))="", "",  | K: =SUM(E50:J50) | S: =SUM(M50:R50) | T: =K50+S50
+Row 51: A: 32 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A39))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B39))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C39))="", "",  | K: =SUM(E51:J51) | S: =SUM(M51:R51) | T: =K51+S51
+Row 52: A: 33 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A40))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B40))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C40))="", "",  | K: =SUM(E52:J52) | S: =SUM(M52:R52) | T: =K52+S52
+Row 53: A: 34 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A41))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B41))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C41))="", "",  | K: =SUM(E53:J53) | S: =SUM(M53:R53) | T: =K53+S53
+Row 54: A: 35 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A42))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B42))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C42))="", "",  | K: =SUM(E54:J54) | S: =SUM(M54:R54) | T: =K54+S54
+Row 55: A: 36 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A43))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B43))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C43))="", "",  | K: =SUM(E55:J55) | S: =SUM(M55:R55) | T: =K55+S55
+Row 56: A: 37 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A44))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B44))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C44))="", "",  | K: =SUM(E56:J56) | S: =SUM(M56:R56) | T: =K56+S56
+Row 57: A: 38 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A45))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B45))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C45))="", "",  | K: =SUM(E57:J57) | S: =SUM(M57:R57) | T: =K57+S57
+Row 58: A: 39 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A46))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B46))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C46))="", "",  | K: =SUM(E58:J58) | S: =SUM(M58:R58) | T: =K58+S58
+Row 59: A: 40 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A47))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B47))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C47))="", "",  | K: =SUM(E59:J59) | S: =SUM(M59:R59) | T: =K59+S59
+Row 61: A: ="Kelas X-2     (" & TRIM(INDEX(INDIRECT("'Data Mu
+Row 62: A: 1 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A52))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B52))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C52))="", "",  | K: =SUM(E62:J62) | S: =SUM(M62:R62) | T: =K62+S62 | U:  
+Row 63: A: 2 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A53))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B53))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C53))="", "",  | K: =SUM(E63:J63) | S: =SUM(M63:R63) | T: =K63+S63
+Row 64: A: 3 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A54))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B54))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C54))="", "",  | K: =SUM(E64:J64) | S: =SUM(M64:R64) | T: =K64+S64
+Row 65: A: 4 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A55))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B55))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C55))="", "",  | K: =SUM(E65:J65) | S: =SUM(M65:R65) | T: =K65+S65
+Row 66: A: 5 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A56))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B56))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C56))="", "",  | K: =SUM(E66:J66) | S: =SUM(M66:R66) | T: =K66+S66
+Row 67: A: 6 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A57))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B57))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C57))="", "",  | K: =SUM(E67:J67) | S: =SUM(M67:R67) | T: =K67+S67
+Row 68: A: 7 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A58))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B58))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C58))="", "",  | K: =SUM(E68:J68) | S: =SUM(M68:R68) | T: =K68+S68
+Row 69: A: 8 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A59))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B59))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C59))="", "",  | K: =SUM(E69:J69) | S: =SUM(M69:R69) | T: =K69+S69
+Row 70: A: 9 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A60))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B60))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C60))="", "",  | K: =SUM(E70:J70) | S: =SUM(M70:R70) | T: =K70+S70
+Row 71: A: 10 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A61))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B61))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C61))="", "",  | K: =SUM(E71:J71) | S: =SUM(M71:R71) | T: =K71+S71
+Row 72: A: 11 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A62))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B62))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C62))="", "",  | K: =SUM(E72:J72) | S: =SUM(M72:R72) | T: =K72+S72
+Row 73: A: 12 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A63))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B63))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C63))="", "",  | K: =SUM(E73:J73) | S: =SUM(M73:R73) | T: =K73+S73
+Row 74: A: 13 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A64))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B64))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C64))="", "",  | K: =SUM(E74:J74) | S: =SUM(M74:R74) | T: =K74+S74
+Row 75: A: 14 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A65))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B65))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C65))="", "",  | K: =SUM(E75:J75) | S: =SUM(M75:R75) | T: =K75+S75
+Row 76: A: 15 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A66))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B66))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C66))="", "",  | K: =SUM(E76:J76) | S: =SUM(M76:R76) | T: =K76+S76
+Row 77: A: 16 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A67))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B67))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C67))="", "",  | K: =SUM(E77:J77) | S: =SUM(M77:R77) | T: =K77+S77
+Row 78: A: 17 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A68))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B68))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C68))="", "",  | K: =SUM(E78:J78) | S: =SUM(M78:R78) | T: =K78+S78
+Row 79: A: 18 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A69))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B69))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C69))="", "",  | K: =SUM(E79:J79) | S: =SUM(M79:R79) | T: =K79+S79
+Row 80: A: 19 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A70))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B70))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C70))="", "",  | K: =SUM(E80:J80) | S: =SUM(M80:R80) | T: =K80+S80
+Row 81: A: 20 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A71))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B71))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C71))="", "",  | K: =SUM(E81:J81) | S: =SUM(M81:R81) | T: =K81+S81
+Row 82: A: 21 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A72))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B72))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C72))="", "",  | K: =SUM(E82:J82) | S: =SUM(M82:R82) | T: =K82+S82
+Row 83: A: 22 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A73))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B73))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C73))="", "",  | K: =SUM(E83:J83) | S: =SUM(M83:R83) | T: =K83+S83
+Row 84: A: 23 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A74))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B74))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C74))="", "",  | K: =SUM(E84:J84) | S: =SUM(M84:R84) | T: =K84+S84
+Row 85: A: 24 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A75))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B75))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C75))="", "",  | K: =SUM(E85:J85) | S: =SUM(M85:R85) | T: =K85+S85
+Row 86: A: 25 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A76))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B76))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C76))="", "",  | K: =SUM(E86:J86) | S: =SUM(M86:R86) | T: =K86+S86
+Row 87: A: 26 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A77))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B77))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C77))="", "",  | K: =SUM(E87:J87) | S: =SUM(M87:R87) | T: =K87+S87
+Row 88: A: 27 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A78))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B78))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C78))="", "",  | K: =SUM(E88:J88) | S: =SUM(M88:R88) | T: =K88+S88
+Row 89: A: 28 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A79))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B79))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C79))="", "",  | K: =SUM(E89:J89) | S: =SUM(M89:R89) | T: =K89+S89
+Row 90: A: 29 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A80))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B80))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C80))="", "",  | K: =SUM(E90:J90) | S: =SUM(M90:R90) | T: =K90+S90
+Row 91: A: 30 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A81))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B81))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C81))="", "",  | K: =SUM(E91:J91) | S: =SUM(M91:R91) | T: =K91+S91
+Row 92: A: 31 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A82))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B82))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C82))="", "",  | K: =SUM(E92:J92) | S: =SUM(M92:R92) | T: =K92+S92
+Row 93: A: 32 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A83))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B83))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C83))="", "",  | K: =SUM(E93:J93) | S: =SUM(M93:R93) | T: =K93+S93
+Row 94: A: 33 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A84))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B84))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C84))="", "",  | K: =SUM(E94:J94) | S: =SUM(M94:R94) | T: =K94+S94
+Row 95: A: 34 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A85))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B85))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C85))="", "",  | K: =SUM(E95:J95) | S: =SUM(M95:R95) | T: =K95+S95
+Row 96: A: 35 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A86))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B86))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C86))="", "",  | K: =SUM(E96:J96) | S: =SUM(M96:R96) | T: =K96+S96
+Row 97: A: 36 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A87))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B87))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C87))="", "",  | K: =SUM(E97:J97) | S: =SUM(M97:R97) | T: =K97+S97
+Row 98: A: 37 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A88))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B88))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C88))="", "",  | K: =SUM(E98:J98) | S: =SUM(M98:R98) | T: =K98+S98
+Row 99: A: 38 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A89))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B89))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C89))="", "",  | K: =SUM(E99:J99) | S: =SUM(M99:R99) | T: =K99+S99
+Row 100: A: 39 | B: =IF(INDIRECT("'Data Murid'!B" & ROW(A90))="", "",  | C: =IF(INDIRECT("'Data Murid'!C" & ROW(B90))="", "",  | D: =IF(INDIRECT("'Data Murid'!D" & ROW(C90))="", "",  | K: =SUM(E100:J100) | S: =SUM(M100:R100) | T: =K100+S100
+
+
+================================================================================
+SHEET 2: Juli
+================================================================================
+Highest Row: 1286
+Highest Column: AN (Index: 40)
+
+--- STYLING ANALYSIS (Sample) ---
+Cell A1:
+  Value: PEMERINTAH PROVINSI JAWA TIMUR
+  Font: Bold Size 14, Name: Arial Narrow
+  Fill: Type=solid, Color=FFFFFF
+  Alignment: H=center, V=center
+
+Cell A2:
+  Value: DINAS PENDIDIKAN
+  Font: Bold Size 14, Name: Arial Narrow
+  Fill: Type=solid, Color=FFFFFF
+  Alignment: H=center, V=center
+
+Cell A3:
+  Value: SEKOLAH MENENGAH ATAS NEGERI 21 SURABAYA
+  Font: Bold Size 14, Name: Arial Narrow
+  Fill: Type=solid, Color=FFFFFF
+  Alignment: H=center, V=center
+
+--- MERGED CELLS ---
+Merged: A1120:AN1120
+Merged: A1162:AN1162
+Merged: A1204:AN1204
+Merged: A1246:AN1246
+Merged: A910:AN910
+Merged: A952:AN952
+Merged: A994:AN994
+Merged: A1036:AN1036
+Merged: A1078:AN1078
+Merged: A7:AN7
+Merged: A9:A10
+Merged: A11:A12
+Merged: B11:B12
+Merged: A819:AN819
+Merged: A525:AN525
+Merged: A777:AN777
+Merged: A567:AN567
+Merged: A609:AN609
+Merged: A735:AN735
+Merged: A693:AN693
+Merged: A651:AN651
+Merged: A1:AN1
+Merged: A2:AN2
+Merged: A3:AN3
+Merged: A4:AN4
+Merged: A6:AN6
+Merged: E436:AI437
+Merged: AJ436:AM437
+Merged: AN436:AN439
+Merged: C9:C12
+Merged: D9:D12
+Merged: A14:AN14
+Merged: E9:AI10
+Merged: AJ9:AM10
+Merged: AN9:AN12
+Merged: A436:A437
+Merged: C436:C439
+Merged: D436:D439
+Merged: A863:A864
+Merged: A865:A866
+Merged: A438:A439
+Merged: B438:B439
+Merged: C863:C866
+Merged: D863:D866
+Merged: A483:AN483
+Merged: E863:AI864
+Merged: AJ863:AM864
+Merged: AN863:AN866
+Merged: B865:B866
+Merged: A56:AN56
+Merged: A98:AN98
+Merged: A140:AN140
+Merged: A182:AN182
+Merged: A224:AN224
+Merged: A266:AN266
+Merged: A308:AN308
+Merged: A350:AN350
+Merged: A392:AN392
+Merged: A441:AN441
+Merged: A868:AN868
+
+--- DATA STRUCTURE (First 100 rows) ---
+Row 1: A: PEMERINTAH PROVINSI JAWA TIMUR
+Row 2: A: DINAS PENDIDIKAN
+Row 3: A: SEKOLAH MENENGAH ATAS NEGERI 21 SURABAYA
+Row 4: A: Jl. Argopuro 11-15 Surabaya Telp. 031-5350753 Fax.
+Row 6: A: DAFTAR KETERLAMBATAN SISWA 
+Row 7: A: ='rekap absensi seluruhnya'!E7
+Row 9: A: NO | C: NAMA LENGKAP | D: JK  | E: PERTEMUAN TGL (ABSENSI) | AJ: PROSENTASE | AN: Total Keterlambatan
+Row 11: A: Urut | B: NIS | E: =DATE(--LEFT(INDIRECT("'KETERLAMBATAN'!A3"),4),7,1 | F: =E11+1 | G: =F11+1 | H: =G11+1 | I: =H11+1 | J: =I11+1 | K: =J11+1 | L: =K11+1 | M: =L11+1 | N: =M11+1 | O: =N11+1 | P: =O11+1 | Q: =P11+1 | R: =Q11+1 | S: =R11+1 | T: =S11+1 | U: =T11+1 | V: =U11+1 | W: =V11+1 | X: =W11+1 | Y: =X11+1 | Z: =Y11+1 | AA: =Z11+1 | AB: =AA11+1 | AC: =AB11+1 | AD: =AC11+1 | AE: =AD11+1 | AF: =AE11+1 | AG: =AF11+1 | AH: =AG11+1 | AI: =AH11+1
+Row 12: E: =IF(E11="","",TEXT(E11,"[$-id]ddd")) | F: =IF(F11="","",TEXT(F11,"[$-id]ddd")) | G: =IF(G11="","",TEXT(G11,"[$-id]ddd")) | H: =IF(H11="","",TEXT(H11,"[$-id]ddd")) | I: =IF(I11="","",TEXT(I11,"[$-id]ddd")) | J: =IF(J11="","",TEXT(J11,"[$-id]ddd")) | K: =IF(K11="","",TEXT(K11,"[$-id]ddd")) | L: =IF(L11="","",TEXT(L11,"[$-id]ddd")) | M: =IF(M11="","",TEXT(M11,"[$-id]ddd")) | N: =IF(N11="","",TEXT(N11,"[$-id]ddd")) | O: =IF(O11="","",TEXT(O11,"[$-id]ddd")) | P: =IF(P11="","",TEXT(P11,"[$-id]ddd")) | Q: =IF(Q11="","",TEXT(Q11,"[$-id]ddd")) | R: =IF(R11="","",TEXT(R11,"[$-id]ddd")) | S: =IF(S11="","",TEXT(S11,"[$-id]ddd")) | T: =IF(T11="","",TEXT(T11,"[$-id]ddd")) | U: =IF(U11="","",TEXT(U11,"[$-id]ddd")) | V: =IF(V11="","",TEXT(V11,"[$-id]ddd")) | W: =IF(W11="","",TEXT(W11,"[$-id]ddd")) | X: =IF(X11="","",TEXT(X11,"[$-id]ddd")) | Y: =IF(Y11="","",TEXT(Y11,"[$-id]ddd")) | Z: =IF(Z11="","",TEXT(Z11,"[$-id]ddd")) | AA: =IF(AA11="","",TEXT(AA11,"[$-id]ddd")) | AB: =IF(AB11="","",TEXT(AB11,"[$-id]ddd")) | AC: =IF(AC11="","",TEXT(AC11,"[$-id]ddd")) | AD: =IF(AD11="","",TEXT(AD11,"[$-id]ddd")) | AE: =IF(AE11="","",TEXT(AE11,"[$-id]ddd")) | AF: =IF(AF11="","",TEXT(AF11,"[$-id]ddd")) | AG: =IF(AG11="","",TEXT(AG11,"[$-id]ddd")) | AH: =IF(AH11="","",TEXT(AH11,"[$-id]ddd")) | AI: =IF(AI11="","",TEXT(AI11,"[$-id]ddd")) | AJ: H | AK: S | AL: I | AM: A
+Row 14: A: ='rekap absensi seluruhnya'!A19:T19
+Row 15: A: 1 | B: ='rekap absensi seluruhnya'!B20 | C: ='rekap absensi seluruhnya'!C20 | D: ='rekap absensi seluruhnya'!D20 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E15:AI15,TRUE)
+Row 16: A: 2 | B: ='rekap absensi seluruhnya'!B21 | C: ='rekap absensi seluruhnya'!C21 | D: ='rekap absensi seluruhnya'!D21 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E16:AI16,TRUE)
+Row 17: A: 3 | B: ='rekap absensi seluruhnya'!B22 | C: ='rekap absensi seluruhnya'!C22 | D: ='rekap absensi seluruhnya'!D22 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E17:AI17,TRUE)
+Row 18: A: 4 | B: ='rekap absensi seluruhnya'!B23 | C: ='rekap absensi seluruhnya'!C23 | D: ='rekap absensi seluruhnya'!D23 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E18:AI18,TRUE)
+Row 19: A: 5 | B: ='rekap absensi seluruhnya'!B24 | C: ='rekap absensi seluruhnya'!C24 | D: ='rekap absensi seluruhnya'!D24 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E19:AI19,TRUE)
+Row 20: A: 6 | B: ='rekap absensi seluruhnya'!B25 | C: ='rekap absensi seluruhnya'!C25 | D: ='rekap absensi seluruhnya'!D25 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E20:AI20,TRUE)
+Row 21: A: 7 | B: ='rekap absensi seluruhnya'!B26 | C: ='rekap absensi seluruhnya'!C26 | D: ='rekap absensi seluruhnya'!D26 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E21:AI21,TRUE)
+Row 22: A: 8 | B: ='rekap absensi seluruhnya'!B27 | C: ='rekap absensi seluruhnya'!C27 | D: ='rekap absensi seluruhnya'!D27 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E22:AI22,TRUE)
+Row 23: A: 9 | B: ='rekap absensi seluruhnya'!B28 | C: ='rekap absensi seluruhnya'!C28 | D: ='rekap absensi seluruhnya'!D28 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E23:AI23,TRUE)
+Row 24: A: 10 | B: ='rekap absensi seluruhnya'!B29 | C: ='rekap absensi seluruhnya'!C29 | D: ='rekap absensi seluruhnya'!D29 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E24:AI24,TRUE)
+Row 25: A: 11 | B: ='rekap absensi seluruhnya'!B30 | C: ='rekap absensi seluruhnya'!C30 | D: ='rekap absensi seluruhnya'!D30 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E25:AI25,TRUE)
+Row 26: A: 12 | B: ='rekap absensi seluruhnya'!B31 | C: ='rekap absensi seluruhnya'!C31 | D: ='rekap absensi seluruhnya'!D31 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E26:AI26,TRUE)
+Row 27: A: 13 | B: ='rekap absensi seluruhnya'!B32 | C: ='rekap absensi seluruhnya'!C32 | D: ='rekap absensi seluruhnya'!D32 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E27:AI27,TRUE)
+Row 28: A: 14 | B: ='rekap absensi seluruhnya'!B33 | C: ='rekap absensi seluruhnya'!C33 | D: ='rekap absensi seluruhnya'!D33 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E28:AI28,TRUE)
+Row 29: A: 15 | B: ='rekap absensi seluruhnya'!B34 | C: ='rekap absensi seluruhnya'!C34 | D: ='rekap absensi seluruhnya'!D34 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E29:AI29,TRUE)
+Row 30: A: 16 | B: ='rekap absensi seluruhnya'!B35 | C: ='rekap absensi seluruhnya'!C35 | D: ='rekap absensi seluruhnya'!D35 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E30:AI30,TRUE)
+Row 31: A: 17 | B: ='rekap absensi seluruhnya'!B36 | C: ='rekap absensi seluruhnya'!C36 | D: ='rekap absensi seluruhnya'!D36 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E31:AI31,TRUE)
+Row 32: A: 18 | B: ='rekap absensi seluruhnya'!B37 | C: ='rekap absensi seluruhnya'!C37 | D: ='rekap absensi seluruhnya'!D37 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E32:AI32,TRUE)
+Row 33: A: 19 | B: ='rekap absensi seluruhnya'!B38 | C: ='rekap absensi seluruhnya'!C38 | D: ='rekap absensi seluruhnya'!D38 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E33:AI33,TRUE)
+Row 34: A: 20 | B: ='rekap absensi seluruhnya'!B39 | C: ='rekap absensi seluruhnya'!C39 | D: ='rekap absensi seluruhnya'!D39 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E34:AI34,TRUE)
+Row 35: A: 21 | B: ='rekap absensi seluruhnya'!B40 | C: ='rekap absensi seluruhnya'!C40 | D: ='rekap absensi seluruhnya'!D40 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E35:AI35,TRUE)
+Row 36: A: 22 | B: ='rekap absensi seluruhnya'!B41 | C: ='rekap absensi seluruhnya'!C41 | D: ='rekap absensi seluruhnya'!D41 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E36:AI36,TRUE)
+Row 37: A: 23 | B: ='rekap absensi seluruhnya'!B42 | C: ='rekap absensi seluruhnya'!C42 | D: ='rekap absensi seluruhnya'!D42 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E37:AI37,TRUE)
+Row 38: A: 24 | B: ='rekap absensi seluruhnya'!B43 | C: ='rekap absensi seluruhnya'!C43 | D: ='rekap absensi seluruhnya'!D43 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E38:AI38,TRUE)
+Row 39: A: 25 | B: ='rekap absensi seluruhnya'!B44 | C: ='rekap absensi seluruhnya'!C44 | D: ='rekap absensi seluruhnya'!D44 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E39:AI39,TRUE)
+Row 40: A: 26 | B: ='rekap absensi seluruhnya'!B45 | C: ='rekap absensi seluruhnya'!C45 | D: ='rekap absensi seluruhnya'!D45 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E40:AI40,TRUE)
+Row 41: A: 27 | B: ='rekap absensi seluruhnya'!B46 | C: ='rekap absensi seluruhnya'!C46 | D: ='rekap absensi seluruhnya'!D46 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E41:AI41,TRUE)
+Row 42: A: 28 | B: ='rekap absensi seluruhnya'!B47 | C: ='rekap absensi seluruhnya'!C47 | D: ='rekap absensi seluruhnya'!D47 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E42:AI42,TRUE)
+Row 43: A: 29 | B: ='rekap absensi seluruhnya'!B48 | C: ='rekap absensi seluruhnya'!C48 | D: ='rekap absensi seluruhnya'!D48 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E43:AI43,TRUE)
+Row 44: A: 30 | B: ='rekap absensi seluruhnya'!B49 | C: ='rekap absensi seluruhnya'!C49 | D: ='rekap absensi seluruhnya'!D49 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E44:AI44,TRUE)
+Row 45: A: 31 | B: ='rekap absensi seluruhnya'!B50 | C: ='rekap absensi seluruhnya'!C50 | D: ='rekap absensi seluruhnya'!D50 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E45:AI45,TRUE)
+Row 46: A: 32 | B: ='rekap absensi seluruhnya'!B51 | C: ='rekap absensi seluruhnya'!C51 | D: ='rekap absensi seluruhnya'!D51 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E46:AI46,TRUE)
+Row 47: A: 33 | B: ='rekap absensi seluruhnya'!B52 | C: ='rekap absensi seluruhnya'!C52 | D: ='rekap absensi seluruhnya'!D52 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E47:AI47,TRUE)
+Row 48: A: 34 | B: ='rekap absensi seluruhnya'!B53 | C: ='rekap absensi seluruhnya'!C53 | D: ='rekap absensi seluruhnya'!D53 | AN: =COUNTIF(E48:AI48,TRUE)
+Row 49: A: 35 | B: ='rekap absensi seluruhnya'!B54 | C: ='rekap absensi seluruhnya'!C54 | D: ='rekap absensi seluruhnya'!D54 | AN: =COUNTIF(E49:AI49,TRUE)
+Row 50: A: 36 | B: ='rekap absensi seluruhnya'!B55 | C: ='rekap absensi seluruhnya'!C55 | D: ='rekap absensi seluruhnya'!D55 | AN: =COUNTIF(E50:AI50,TRUE)
+Row 51: A: 37 | B: ='rekap absensi seluruhnya'!B56 | C: ='rekap absensi seluruhnya'!C56 | D: ='rekap absensi seluruhnya'!D56 | AN: =COUNTIF(E51:AI51,TRUE)
+Row 52: A: 38 | B: ='rekap absensi seluruhnya'!B57 | C: ='rekap absensi seluruhnya'!C57 | D: ='rekap absensi seluruhnya'!D57 | AN: =COUNTIF(E52:AI52,TRUE)
+Row 53: A: 39 | B: ='rekap absensi seluruhnya'!B58 | C: ='rekap absensi seluruhnya'!C58 | D: ='rekap absensi seluruhnya'!D58 | AN: =COUNTIF(E53:AI53,TRUE)
+Row 54: A: 40 | B: ='rekap absensi seluruhnya'!B59 | C: ='rekap absensi seluruhnya'!C59 | D: ='rekap absensi seluruhnya'!D59 | AN: =COUNTIF(E54:AI54,TRUE)
+Row 56: A: ='rekap absensi seluruhnya'!A61:T61
+Row 57: A: 1 | B: ='rekap absensi seluruhnya'!B62 | C: ='rekap absensi seluruhnya'!C62 | D: ='rekap absensi seluruhnya'!D62 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E57:AI57,TRUE)
+Row 58: A: 2 | B: ='rekap absensi seluruhnya'!B63 | C: ='rekap absensi seluruhnya'!C63 | D: ='rekap absensi seluruhnya'!D63 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E58:AI58,TRUE)
+Row 59: A: 3 | B: ='rekap absensi seluruhnya'!B64 | C: ='rekap absensi seluruhnya'!C64 | D: ='rekap absensi seluruhnya'!D64 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E59:AI59,TRUE)
+Row 60: A: 4 | B: ='rekap absensi seluruhnya'!B65 | C: ='rekap absensi seluruhnya'!C65 | D: ='rekap absensi seluruhnya'!D65 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E60:AI60,TRUE)
+Row 61: A: 5 | B: ='rekap absensi seluruhnya'!B66 | C: ='rekap absensi seluruhnya'!C66 | D: ='rekap absensi seluruhnya'!D66 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E61:AI61,TRUE)
+Row 62: A: 6 | B: ='rekap absensi seluruhnya'!B67 | C: ='rekap absensi seluruhnya'!C67 | D: ='rekap absensi seluruhnya'!D67 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E62:AI62,TRUE)
+Row 63: A: 7 | B: ='rekap absensi seluruhnya'!B68 | C: ='rekap absensi seluruhnya'!C68 | D: ='rekap absensi seluruhnya'!D68 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E63:AI63,TRUE)
+Row 64: A: 8 | B: ='rekap absensi seluruhnya'!B69 | C: ='rekap absensi seluruhnya'!C69 | D: ='rekap absensi seluruhnya'!D69 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E64:AI64,TRUE)
+Row 65: A: 9 | B: ='rekap absensi seluruhnya'!B70 | C: ='rekap absensi seluruhnya'!C70 | D: ='rekap absensi seluruhnya'!D70 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E65:AI65,TRUE)
+Row 66: A: 10 | B: ='rekap absensi seluruhnya'!B71 | C: ='rekap absensi seluruhnya'!C71 | D: ='rekap absensi seluruhnya'!D71 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E66:AI66,TRUE)
+Row 67: A: 11 | B: ='rekap absensi seluruhnya'!B72 | C: ='rekap absensi seluruhnya'!C72 | D: ='rekap absensi seluruhnya'!D72 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E67:AI67,TRUE)
+Row 68: A: 12 | B: ='rekap absensi seluruhnya'!B73 | C: ='rekap absensi seluruhnya'!C73 | D: ='rekap absensi seluruhnya'!D73 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E68:AI68,TRUE)
+Row 69: A: 13 | B: ='rekap absensi seluruhnya'!B74 | C: ='rekap absensi seluruhnya'!C74 | D: ='rekap absensi seluruhnya'!D74 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E69:AI69,TRUE)
+Row 70: A: 14 | B: ='rekap absensi seluruhnya'!B75 | C: ='rekap absensi seluruhnya'!C75 | D: ='rekap absensi seluruhnya'!D75 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E70:AI70,TRUE)
+Row 71: A: 15 | B: ='rekap absensi seluruhnya'!B76 | C: ='rekap absensi seluruhnya'!C76 | D: ='rekap absensi seluruhnya'!D76 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E71:AI71,TRUE)
+Row 72: A: 16 | B: ='rekap absensi seluruhnya'!B77 | C: ='rekap absensi seluruhnya'!C77 | D: ='rekap absensi seluruhnya'!D77 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E72:AI72,TRUE)
+Row 73: A: 17 | B: ='rekap absensi seluruhnya'!B78 | C: ='rekap absensi seluruhnya'!C78 | D: ='rekap absensi seluruhnya'!D78 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E73:AI73,TRUE)
+Row 74: A: 18 | B: ='rekap absensi seluruhnya'!B79 | C: ='rekap absensi seluruhnya'!C79 | D: ='rekap absensi seluruhnya'!D79 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E74:AI74,TRUE)
+Row 75: A: 19 | B: ='rekap absensi seluruhnya'!B80 | C: ='rekap absensi seluruhnya'!C80 | D: ='rekap absensi seluruhnya'!D80 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E75:AI75,TRUE)
+Row 76: A: 20 | B: ='rekap absensi seluruhnya'!B81 | C: ='rekap absensi seluruhnya'!C81 | D: ='rekap absensi seluruhnya'!D81 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E76:AI76,TRUE)
+Row 77: A: 21 | B: ='rekap absensi seluruhnya'!B82 | C: ='rekap absensi seluruhnya'!C82 | D: ='rekap absensi seluruhnya'!D82 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E77:AI77,TRUE)
+Row 78: A: 22 | B: ='rekap absensi seluruhnya'!B83 | C: ='rekap absensi seluruhnya'!C83 | D: ='rekap absensi seluruhnya'!D83 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E78:AI78,TRUE)
+Row 79: A: 23 | B: ='rekap absensi seluruhnya'!B84 | C: ='rekap absensi seluruhnya'!C84 | D: ='rekap absensi seluruhnya'!D84 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E79:AI79,TRUE)
+Row 80: A: 24 | B: ='rekap absensi seluruhnya'!B85 | C: ='rekap absensi seluruhnya'!C85 | D: ='rekap absensi seluruhnya'!D85 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E80:AI80,TRUE)
+Row 81: A: 25 | B: ='rekap absensi seluruhnya'!B86 | C: ='rekap absensi seluruhnya'!C86 | D: ='rekap absensi seluruhnya'!D86 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E81:AI81,TRUE)
+Row 82: A: 26 | B: ='rekap absensi seluruhnya'!B87 | C: ='rekap absensi seluruhnya'!C87 | D: ='rekap absensi seluruhnya'!D87 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E82:AI82,TRUE)
+Row 83: A: 27 | B: ='rekap absensi seluruhnya'!B88 | C: ='rekap absensi seluruhnya'!C88 | D: ='rekap absensi seluruhnya'!D88 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E83:AI83,TRUE)
+Row 84: A: 28 | B: ='rekap absensi seluruhnya'!B89 | C: ='rekap absensi seluruhnya'!C89 | D: ='rekap absensi seluruhnya'!D89 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E84:AI84,TRUE)
+Row 85: A: 29 | B: ='rekap absensi seluruhnya'!B90 | C: ='rekap absensi seluruhnya'!C90 | D: ='rekap absensi seluruhnya'!D90 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E85:AI85,TRUE)
+Row 86: A: 30 | B: ='rekap absensi seluruhnya'!B91 | C: ='rekap absensi seluruhnya'!C91 | D: ='rekap absensi seluruhnya'!D91 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E86:AI86,TRUE)
+Row 87: A: 31 | B: ='rekap absensi seluruhnya'!B92 | C: ='rekap absensi seluruhnya'!C92 | D: ='rekap absensi seluruhnya'!D92 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E87:AI87,TRUE)
+Row 88: A: 32 | B: ='rekap absensi seluruhnya'!B93 | C: ='rekap absensi seluruhnya'!C93 | D: ='rekap absensi seluruhnya'!D93 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E88:AI88,TRUE)
+Row 89: A: 33 | B: ='rekap absensi seluruhnya'!B94 | C: ='rekap absensi seluruhnya'!C94 | D: ='rekap absensi seluruhnya'!D94 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E89:AI89,TRUE)
+Row 90: A: 34 | B: ='rekap absensi seluruhnya'!B95 | C: ='rekap absensi seluruhnya'!C95 | D: ='rekap absensi seluruhnya'!D95 | AN: =COUNTIF(E90:AI90,TRUE)
+Row 91: A: 35 | B: ='rekap absensi seluruhnya'!B96 | C: ='rekap absensi seluruhnya'!C96 | D: ='rekap absensi seluruhnya'!D96 | AN: =COUNTIF(E91:AI91,TRUE)
+Row 92: A: 36 | B: ='rekap absensi seluruhnya'!B97 | C: ='rekap absensi seluruhnya'!C97 | D: ='rekap absensi seluruhnya'!D97 | AN: =COUNTIF(E92:AI92,TRUE)
+Row 93: A: 37 | B: ='rekap absensi seluruhnya'!B98 | C: ='rekap absensi seluruhnya'!C98 | D: ='rekap absensi seluruhnya'!D98 | AN: =COUNTIF(E93:AI93,TRUE)
+Row 94: A: 38 | B: ='rekap absensi seluruhnya'!B99 | C: ='rekap absensi seluruhnya'!C99 | D: ='rekap absensi seluruhnya'!D99 | AN: =COUNTIF(E94:AI94,TRUE)
+Row 95: A: 39 | B: ='rekap absensi seluruhnya'!B100 | C: ='rekap absensi seluruhnya'!C100 | D: ='rekap absensi seluruhnya'!D100 | AN: =COUNTIF(E95:AI95,TRUE)
+Row 96: A: 40 | B: ='rekap absensi seluruhnya'!B101 | C: ='rekap absensi seluruhnya'!C101 | D: ='rekap absensi seluruhnya'!D101 | AN: =COUNTIF(E96:AI96,TRUE)
+Row 98: A: ='rekap absensi seluruhnya'!A103:T103
+Row 99: A: 1 | B: ='rekap absensi seluruhnya'!B104 | C: ='rekap absensi seluruhnya'!C104 | D: ='rekap absensi seluruhnya'!D104 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E99:AI99,TRUE)
+Row 100: A: 2 | B: ='rekap absensi seluruhnya'!B105 | C: ='rekap absensi seluruhnya'!C105 | D: ='rekap absensi seluruhnya'!D105 | AJ: =(#REF!)*100% | AK: =(#REF!)*100% | AL: =(#REF!)*100% | AM: =(#REF!)*100% | AN: =COUNTIF(E100:AI100,TRUE)
+
+
+================================================================================
+SHEET 3: Keterlambatan
+================================================================================
+Highest Row: 15
+Highest Column: I (Index: 9)
+
+--- STYLING ANALYSIS (Sample) ---
+Cell A1:
+  Value: LAPORAN KETERLAMBATAN SISWA
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+Cell A2:
+  Value: TAHUN PELAJARAN
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+Cell A3:
+  Value: 2025-2026
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+--- MERGED CELLS ---
+Tidak ada merged cells
+
+--- DATA STRUCTURE (First 100 rows) ---
+Row 1: A: LAPORAN KETERLAMBATAN SISWA
+Row 2: A: TAHUN PELAJARAN
+Row 3: A: 2025-2026
+Row 5: A: Kelas: X-2
+Row 6: A: WALIKELAS: Budi Santoso
+Row 7: A: No | B: NIS | C: Nama Murid | D: Gender | E: Tanggal | F: Bulan | G: Tahun | H: Total Keterlambatan
+Row 8: A: 1 | B: 1234567890 | C: Andi Prasetyo | D: Laki-laki | E: 16 | F: November | G: 2025 | H: 1
+Row 9: A: 2 | B: 1234567891 | C: Siti Aisyah | D: Perempuan | E: 16 | F: November | G: 2025 | H: 1
+Row 11: A: Kelas: XI-1
+Row 12: A: WALIKELAS: Jibur Jumawa S.P.d
+Row 13: A: No | B: NIS | C: Nama Murid | D: Gender | E: Tanggal | F: Bulan | G: Tahun | H: Total Keterlambatan
+Row 14: A: 3 | B: 3209582387529 | C: Ajeng WIluyo | D: Perempuan | E: 16 | F: November | G: 2025 | H: 2
+Row 15: A: 4 | B: 3209582387529 | C: Ajeng WIluyo | D: Perempuan | E: 17 | F: November | G: 2025
+
+
+================================================================================
+SHEET 4: Data Murid
+================================================================================
+Highest Row: 1323
+Highest Column: E (Index: 5)
+
+--- STYLING ANALYSIS (Sample) ---
+Cell A1:
+  Value: DATA MURID AKTIF
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+Cell A2:
+  Value: TAHUN PELAJARAN
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+Cell A3:
+  Value: 2025-2026
+  Font: Bold Size 14, Name: Calibri
+  Fill: Type=none, Color=FFFFFF
+  Alignment: H=left, V=bottom
+
+--- MERGED CELLS ---
+Tidak ada merged cells
+
+--- DATA STRUCTURE (First 100 rows) ---
+Row 1: A: DATA MURID AKTIF
+Row 2: A: TAHUN PELAJARAN
+Row 3: A: 2025-2026
+Row 5: A: Kelas: X-1
+Row 6: A: WALIKELAS: Andi Prasetyo
+Row 7: A: No | B: NIS | C: Nama Lengkap | D: Gender
+Row 8: A: 1 | B: 1234567891 | C: Siti Aisyah | D: Perempuan
+Row 9: A: 2
+Row 10: A: 3
+Row 11: A: 4
+Row 12: A: 5
+Row 13: A: 6
+Row 14: A: 7
+Row 15: A: 8
+Row 16: A: 9
+Row 17: A: 10
+Row 18: A: 11
+Row 19: A: 12
+Row 20: A: 13
+Row 21: A: 14
+Row 22: A: 15
+Row 23: A: 16
+Row 24: A: 17
+Row 25: A: 18
+Row 26: A: 19
+Row 27: A: 20
+Row 28: A: 21
+Row 29: A: 22
+Row 30: A: 23
+Row 31: A: 24
+Row 32: A: 25
+Row 33: A: 26
+Row 34: A: 27
+Row 35: A: 28
+Row 36: A: 29
+Row 37: A: 30
+Row 38: A: 31
+Row 39: A: 32
+Row 40: A: 33
+Row 41: A: 34
+Row 42: A: 35
+Row 43: A: 36
+Row 44: A: 37
+Row 45: A: 38
+Row 46: A: 39
+Row 47: A: 40
+Row 49: A: Kelas: X-2
+Row 50: A: WALIKELAS: Budi Santoso
+Row 51: A: No | B: NIS | C: Nama Lengkap | D: Gender
+Row 52: A: 1 | B: 1234567890 | C: Andi Prasetyo | D: Laki-laki
+Row 53: A: 2
+Row 54: A: 3
+Row 55: A: 4
+Row 56: A: 5
+Row 57: A: 6
+Row 58: A: 7
+Row 59: A: 8
+Row 60: A: 9
+Row 61: A: 10
+Row 62: A: 11
+Row 63: A: 12
+Row 64: A: 13
+Row 65: A: 14
+Row 66: A: 15
+Row 67: A: 16
+Row 68: A: 17
+Row 69: A: 18
+Row 70: A: 19
+Row 71: A: 20
+Row 72: A: 21
+Row 73: A: 22
+Row 74: A: 23
+Row 75: A: 24
+Row 76: A: 25
+Row 77: A: 26
+Row 78: A: 27
+Row 79: A: 28
+Row 80: A: 29
+Row 81: A: 30
+Row 82: A: 31
+Row 83: A: 32
+Row 84: A: 33
+Row 85: A: 34
+Row 86: A: 35
+Row 87: A: 36
+Row 88: A: 37
+Row 89: A: 38
+Row 90: A: 39
+Row 91: A: 40
+Row 93: A: Kelas: X-3
+Row 94: A: WALIKELAS: -
+Row 95: A: No | B: NIS | C: Nama Lengkap | D: Gender
+Row 96: A: 1
+Row 97: A: 2
+Row 98: A: 3
+Row 99: A: 4
+Row 100: A: 5
+
+
+================================================================================
+SHEET 5: Sheet1
+================================================================================
+Highest Row: 1000
+Highest Column: Z (Index: 26)
+
+--- STYLING ANALYSIS (Sample) ---
+--- MERGED CELLS ---
+Tidak ada merged cells
+
+--- DATA STRUCTURE (First 100 rows) ---
+
+
+=== ANALISIS SELESAI ===
