@@ -361,10 +361,14 @@ Fitur yang bisa ditambahkan di masa depan:
 
 Project ini dibuat untuk keperluan pembelajaran dan pengembangan sistem informasi sekolah.
 
+## 👤 Developer
+
+**Fahrezi Isnaen Fauzan**
+
 ## 👥 Kontribusi
 
 Project ini dikembangkan menggunakan Laravel 12 dengan mengikuti best practices dan coding standards Laravel.
 
 ---
 
-**Dibuat dengan ❤️ menggunakan Laravel**
+**Dibuat dengan ❤️ oleh Fahrezi Isnaen Fauzan menggunakan Laravel**
