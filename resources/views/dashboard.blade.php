@@ -38,7 +38,7 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 {{ Auth::user()->role === 'Walikelas' ? 'lg:grid-cols-3' : 'lg:grid-cols-4' }} gap-4 sm:gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 {{ Auth::user()->role === 'Walikelas' ? 'lg:grid-cols-4' : 'lg:grid-cols-5' }} gap-4 sm:gap-6 mb-8">
                 @if(Auth::user()->role !== 'Walikelas')
                     <!-- Total Users (hanya untuk Admin dan TATIB) -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
@@ -86,16 +86,31 @@
                     </div>
                 </div>
 
-                <!-- Total Keterlambatan -->
+                <!-- Keterlambatan Hari Ini -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Keterlambatan Hari Ini</p>
+                            <p class="text-3xl font-bold text-gray-800">{{ $stats['keterlambatan_hari_ini'] ?? 0 }}</p>
+                        </div>
+                        <div class="bg-orange-100 rounded-full p-3">
+                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keterlambatan Bulan Ini -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500 hover:shadow-xl transition-shadow duration-300">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 mb-1">Total Keterlambatan</p>
-                            <p class="text-3xl font-bold text-gray-800">{{ $stats['total_keterlambatan'] ?? 0 }}</p>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Keterlambatan Bulan Ini</p>
+                            <p class="text-3xl font-bold text-gray-800">{{ $stats['keterlambatan_bulan_ini'] ?? 0 }}</p>
                         </div>
                         <div class="bg-red-100 rounded-full p-3">
                             <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
                     </div>

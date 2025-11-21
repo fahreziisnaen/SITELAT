@@ -90,6 +90,7 @@
                         <span class="lg:hidden">Keterlambatan</span>
                     </a>
                     
+                    @if(Auth::user()->role !== 'Walikelas')
                     <a href="{{ route('report.index') }}" class="inline-flex items-center px-2 md:px-3 lg:px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('report.*') ? 'bg-white/20 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <svg class="w-4 h-4 mr-1 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -97,6 +98,7 @@
                         <span class="hidden lg:inline">Report</span>
                         <span class="lg:hidden">Laporan</span>
                     </a>
+                    @endif
                 </div>
             </div>
 
@@ -199,9 +201,11 @@
                 Data Keterlambatan
             </a>
             
+            @if(Auth::user()->role !== 'Walikelas')
             <a href="{{ route('report.index') }}" class="block pl-3 pr-4 py-2 text-base font-medium {{ request()->routeIs('report.*') ? 'bg-white/20 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }} transition duration-150 ease-in-out">
                 Report
             </a>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -299,13 +303,15 @@
             <span class="text-xs font-medium">Terlambat</span>
         </a>
 
-        <!-- Report -->
+        <!-- Report (hanya untuk Admin dan TATIB) -->
+        @if(Auth::user()->role !== 'Walikelas')
         <a href="{{ route('report.index') }}" class="flex flex-col items-center justify-center flex-1 py-2 px-2 transition-colors duration-200 {{ request()->routeIs('report.*') ? 'text-white bg-white/20 rounded-lg' : 'text-white/70 hover:text-white' }}">
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             <span class="text-xs font-medium">Report</span>
         </a>
+        @endif
 
         <!-- Profile -->
         <div class="relative flex-1" x-data="{ open: false }">

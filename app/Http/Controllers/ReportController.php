@@ -72,95 +72,20 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        $user = auth()->user();
-
-        // Jika user adalah Walikelas, hanya bisa melihat kelas yang dia pegang
-        if ($user && $user->role === 'Walikelas') {
-            // Pastikan hanya mengambil kelas yang dipegang oleh user ini
-            $kelas = Kelas::where('username', $user->username)
-                ->orderBy('kelas')
-                ->get();
-            // Walikelas tidak perlu memilih kelas, akan otomatis menampilkan semua kelas yang dia pegang
-            $selectedKelas = null;
-        } else {
-            // Admin dan TATIB bisa melihat semua kelas
-            $kelas = Kelas::orderBy('kelas')->get();
-            $selectedKelas = $request->input('kelas');
+        // Hanya Admin dan TATIB yang bisa mengakses report
+        if (auth()->user()->role === 'Walikelas') {
+            abort(403, 'Unauthorized action.');
         }
 
-        $jenisLaporan = $request->input('jenis_laporan');
         $tahunRange = $request->input('tahun'); // Format: "2025-2026"
-        $bulan = $request->input('bulan');
-        $semester = $request->input('semester');
 
-        // Parse tahun range (format: "2025-2026")
-        $tahun = null;
-        $tahunBerikutnya = null;
-        if ($tahunRange && strpos($tahunRange, '-') !== false) {
-            $tahunParts = explode('-', $tahunRange);
-            $tahun = (int) $tahunParts[0];
-            $tahunBerikutnya = (int) $tahunParts[1];
+        // Jika ada tahun ajaran yang dipilih, langsung export Excel
+        if ($tahunRange) {
+            return $this->exportSemester($request);
         }
 
-        $startDate = null;
-        $endDate = null;
-        $periodeLabel = null;
-
-        // Hitung start_date dan end_date berdasarkan jenis laporan
-        if ($jenisLaporan && $tahun) {
-            if ($jenisLaporan === 'bulanan' && $bulan) {
-                // Laporan Bulanan: tahun dan bulan (gunakan tahun pertama dari range)
-                $startDate = \Carbon\Carbon::create($tahun, $bulan, 1)->format('Y-m-d');
-                $endDate = \Carbon\Carbon::create($tahun, $bulan, 1)->endOfMonth()->format('Y-m-d');
-
-                // Format label bulan
-                $bulanNama = [
-                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-                    5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-                    9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
-                ];
-                $periodeLabel = $bulanNama[$bulan].' '.$tahunRange;
-            } elseif ($jenisLaporan === 'semester' && $tahunRange) {
-                // Laporan Semester: langsung export Excel untuk semua semester (1 dan 2)
-                return $this->exportSemester($request);
-            }
-        }
-
-        $report = null;
-
-        if ($startDate && $endDate) {
-            // Query keterlambatan berdasarkan filter
-            $query = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate]);
-
-            // Filter berdasarkan kelas jika dipilih
-            if ($selectedKelas) {
-                $query->where('kelas', $selectedKelas);
-            }
-
-            // Jika user adalah Walikelas, filter berdasarkan kelas yang dia pegang
-            if ($user && $user->role === 'Walikelas') {
-                $kelasIds = Kelas::where('username', $user->username)->pluck('kelas')->toArray();
-                $query->whereIn('kelas', $kelasIds);
-            }
-
-            $report = $query->orderBy('tanggal', 'desc')
-                ->orderBy('kelas')
-                ->orderBy('nama_murid')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'tanggal' => $item->tanggal,
-                        'NIS' => $item->NIS ?? '-',
-                        'nama_murid' => $item->nama_murid ?? '-',
-                        'gender' => $item->gender ?? '-',
-                        'kelas' => $item->kelas ?? '-',
-                        'username' => $item->username ?? '-',
-                        'keterangan' => $item->keterangan ?? '-',
-                    ];
-                });
-        }
-
-        return view('report.index', compact('kelas', 'selectedKelas', 'jenisLaporan', 'tahunRange', 'bulan', 'semester', 'startDate', 'endDate', 'periodeLabel', 'report'));
+        // Jika belum ada tahun ajaran, tampilkan form
+        return view('report.index', compact('tahunRange'));
     }
 
     /**
@@ -169,9 +94,12 @@ class ReportController extends Controller
      */
     public function exportSemester(Request $request)
     {
-        $user = auth()->user();
+        // Hanya Admin dan TATIB yang bisa mengakses report
+        if (auth()->user()->role === 'Walikelas') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $tahunRange = $request->input('tahun'); // Format: "2025-2026"
-        $selectedKelas = $request->input('kelas');
 
         if (! $tahunRange) {
             return redirect()->route('report.index')
@@ -206,33 +134,92 @@ class ReportController extends Controller
         copy($templatePath, $tempPath);
 
         try {
-            // Query data
+            // Query keterlambatan dengan snapshot kelas untuk pengelompokan yang benar
+            $keterlambatanQuery = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate])
+                ->whereNotNull('NIS')
+                ->whereNotNull('kelas') // Hanya ambil yang punya snapshot kelas
+                ->select('NIS', 'nama_murid', 'gender', 'kelas', 'tanggal')
+                ->orderBy('kelas')
+                ->orderBy('nama_murid')
+                ->orderBy('tanggal')
+                ->get();
+
+            // Kelompokkan keterlambatan berdasarkan snapshot kelas
+            $keterlambatanByKelas = $keterlambatanQuery->groupBy('kelas');
+
+            // Ambil semua kelas dari tabel kelas (untuk menampilkan semua murid aktif)
             $allKelas = $this->sortKelasNatural(Kelas::all());
 
-            $muridAktif = Murid::where('status', 'Aktif')
-                ->whereNotNull('kelas')
-                ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
-                ->orderBy('kelas')
-                ->orderBy('nama_lengkap')
-                ->get()
-                ->groupBy('kelas');
+            // Ambil semua NIS yang punya keterlambatan (untuk menghindari duplikasi)
+            $nisWithKeterlambatan = $keterlambatanQuery->pluck('NIS')->unique();
 
-            $keterlambatanData = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate])
-                ->whereNotNull('NIS')
-                ->select('NIS', 'tanggal')
-                ->orderBy('NIS')
-                ->orderBy('tanggal')
-                ->get()
-                ->groupBy('NIS')
-                ->map(function ($items) {
-                    return $items->map(function ($item) {
+            // Buat struktur data untuk setiap kelas berdasarkan snapshot keterlambatan
+            $dataByKelas = [];
+            foreach ($keterlambatanByKelas as $snapshotKelas => $keterlambatanItems) {
+                // Kelompokkan keterlambatan per murid (NIS) dalam kelas ini
+                $keterlambatanPerMurid = $keterlambatanItems->groupBy('NIS')->map(function ($items) {
+                    $firstItem = $items->first();
+                    $tanggalKeterlambatan = $items->map(function ($item) {
                         return \Carbon\Carbon::parse($item->tanggal)->format('n/j/Y');
                     })->implode(',');
-                });
+
+                    return [
+                        'NIS' => $firstItem->NIS,
+                        'nama_lengkap' => $firstItem->nama_murid, // Dari snapshot
+                        'gender' => $firstItem->gender, // Dari snapshot
+                        'kelas' => $firstItem->kelas, // Dari snapshot
+                        'tanggal_keterlambatan' => $tanggalKeterlambatan,
+                    ];
+                })->values();
+
+                $dataByKelas[$snapshotKelas] = $keterlambatanPerMurid;
+            }
+
+            // Pastikan semua kelas dari tabel Kelas ditampilkan
+            // Tambahkan murid aktif yang tidak punya keterlambatan di kelas mereka saat ini
+            foreach ($allKelas as $kelas) {
+                $kelasName = $kelas->kelas;
+
+                // Jika kelas ini belum ada di dataByKelas (tidak ada keterlambatan dengan snapshot kelas ini)
+                if (! isset($dataByKelas[$kelasName])) {
+                    // Ambil murid aktif di kelas ini yang tidak punya keterlambatan
+                    $muridAktifKelas = Murid::where('status', 'Aktif')
+                        ->where('kelas', $kelasName)
+                        ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
+                        ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
+                        ->orderBy('nama_lengkap')
+                        ->get()
+                        ->map(function ($murid) {
+                            return [
+                                'NIS' => $murid->NIS,
+                                'nama_lengkap' => $murid->nama_lengkap,
+                                'gender' => $murid->gender,
+                                'kelas' => $murid->kelas,
+                                'tanggal_keterlambatan' => '', // Tidak ada keterlambatan
+                            ];
+                        });
+
+                    // Selalu tambahkan kelas, meskipun tidak ada murid (untuk menampilkan semua kelas)
+                    $dataByKelas[$kelasName] = $muridAktifKelas;
+                }
+            }
+
+            // Pastikan semua kelas dari tabel Kelas ada di dataByKelas (termasuk yang tidak ada muridnya)
+            foreach ($allKelas as $kelas) {
+                $kelasName = $kelas->kelas;
+                if (! isset($dataByKelas[$kelasName])) {
+                    // Kelas tidak ada murid sama sekali, tambahkan dengan collection kosong
+                    $dataByKelas[$kelasName] = collect();
+                }
+            }
+
+            // Pastikan semua kelas ditampilkan (termasuk yang tidak ada di dataByKelas)
+            // Re-sort kelas menggunakan semua kelas dari tabel Kelas
+            $allKelas = $this->sortKelasNatural(Kelas::all());
 
             // Buat sheet baru menggunakan OpenSpout ke file sementara
             $newSheetPath = storage_path('app/temp/new_sheet_'.uniqid().'.xlsx');
-            $this->createDataMuridSheet($newSheetPath, $tahunRange, $allKelas, $muridAktif, $keterlambatanData);
+            $this->createDataMuridSheet($newSheetPath, $tahunRange, $allKelas, $dataByKelas);
 
             // Tambahkan sheet baru ke template menggunakan ZipArchive
             $this->addSheetToTemplate($tempPath, $newSheetPath, 'Data Murid');
@@ -257,8 +244,9 @@ class ReportController extends Controller
 
     /**
      * Buat sheet Data Murid menggunakan OpenSpout
+     * $dataByKelas: array dengan key = snapshot kelas, value = collection murid dengan keterlambatan
      */
-    private function createDataMuridSheet($filePath, $tahunRange, $allKelas, $muridAktif, $keterlambatanData)
+    private function createDataMuridSheet($filePath, $tahunRange, $allKelas, $dataByKelas)
     {
         $options = new Options;
         $options->setTempFolder(storage_path('app/temp'));
@@ -295,19 +283,22 @@ class ReportController extends Controller
         $writer->addRow(Row::fromValues([$tahunRange], $headerStyle));
         $writer->addRow(Row::fromValues([])); // Baris kosong
 
-        // Loop untuk setiap kelas
+        // Loop untuk setiap kelas berdasarkan snapshot keterlambatan
         foreach ($allKelas as $kelas) {
-            // Ambil walikelas
+            $snapshotKelas = $kelas->kelas;
+
+            // Ambil walikelas dari snapshot (cari kelas berdasarkan snapshot kelas)
             $walikelasNama = '-';
-            if ($kelas->username) {
-                $walikelas = User::where('username', $kelas->username)->first();
+            $kelasData = Kelas::where('kelas', $snapshotKelas)->first();
+            if ($kelasData && $kelasData->username) {
+                $walikelas = User::where('username', $kelasData->username)->first();
                 if ($walikelas) {
                     $walikelasNama = $walikelas->nama_lengkap;
                 }
             }
 
-            // Kelas dan Walikelas
-            $writer->addRow(Row::fromValues(['Kelas: '.$kelas->kelas], $kelasHeaderStyle));
+            // Kelas dan Walikelas (menggunakan snapshot kelas)
+            $writer->addRow(Row::fromValues(['Kelas: '.$snapshotKelas], $kelasHeaderStyle));
             $writer->addRow(Row::fromValues(['WALIKELAS: '.$walikelasNama], $kelasHeaderStyle));
 
             // Header tabel
@@ -319,23 +310,22 @@ class ReportController extends Controller
                 'Tanggal Keterlambatan',
             ], $tableHeaderStyle));
 
-            // Ambil data murid untuk kelas ini
-            $muridKelas = $muridAktif->get($kelas->kelas, collect());
+            // Ambil data murid untuk kelas ini berdasarkan snapshot (dari keterlambatan)
+            $muridKelas = $dataByKelas[$snapshotKelas] ?? collect();
             $noMurid = 1;
 
             // Siapkan 40 baris untuk setiap kelas
             for ($i = 0; $i < 40; $i++) {
                 if ($i < $muridKelas->count()) {
-                    // Ada data murid
-                    $murid = $muridKelas->values()[$i];
-                    $tanggalKeterlambatan = $keterlambatanData->get($murid->NIS, '');
+                    // Ada data murid dari snapshot keterlambatan
+                    $murid = $muridKelas[$i];
 
                     $writer->addRow(Row::fromValues([
                         (string) $noMurid++,
-                        $murid->NIS ?? '-',
-                        $murid->nama_lengkap ?? '-',
-                        $murid->gender ?? '-',
-                        $tanggalKeterlambatan,
+                        $murid['NIS'] ?? '-',
+                        $murid['nama_lengkap'] ?? '-', // Dari snapshot
+                        $murid['gender'] ?? '-', // Dari snapshot
+                        $murid['tanggal_keterlambatan'] ?? '',
                     ], $dataStyle));
                 } else {
                     // Baris kosong
