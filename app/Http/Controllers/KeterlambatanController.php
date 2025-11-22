@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keterlambatan;
 use App\Models\Murid;
+use App\Services\KeterlambatanNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,39 +16,39 @@ class KeterlambatanController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        
+
         // Ambil filter dari request
         $tanggal = $request->input('tanggal');
         $namaMurid = $request->input('nama_murid');
-        
+
         // Query dasar - gunakan snapshot, tidak perlu relasi murid
         $query = Keterlambatan::with('walikelas');
-        
+
         // Jika user adalah Walikelas, filter berdasarkan snapshot kelas yang dia pegang
         if ($user && $user->role === 'Walikelas') {
             // Ambil semua kelas yang dipegang oleh Walikelas
             $kelasIds = \App\Models\Kelas::where('username', $user->username)->pluck('kelas');
-            
+
             // Filter berdasarkan snapshot kelas saja (data historis)
             $query->whereIn('kelas', $kelasIds);
         }
-        
+
         // Filter berdasarkan tanggal
         if ($tanggal) {
             $query->whereDate('tanggal', $tanggal);
         }
-        
+
         // Filter berdasarkan nama murid - gunakan snapshot nama_murid
         if ($namaMurid) {
-            $query->where('nama_murid', 'like', '%' . $namaMurid . '%');
+            $query->where('nama_murid', 'like', '%'.$namaMurid.'%');
         }
-        
+
         // Order dan paginate
         $keterlambatan = $query->orderBy('tanggal', 'desc')
             ->orderBy('waktu', 'desc')
             ->paginate(10)
             ->withQueryString(); // Preserve query string untuk pagination
-        
+
         return view('keterlambatan.index', compact('keterlambatan', 'tanggal', 'namaMurid'));
     }
 
@@ -60,8 +61,9 @@ class KeterlambatanController extends Controller
         if (auth()->user()->role === 'Walikelas') {
             return redirect()->route('keterlambatan.index')->with('error', 'Anda tidak memiliki izin untuk menambahkan data keterlambatan.');
         }
-        
+
         $murids = Murid::orderBy('nama_lengkap')->get();
+
         return view('keterlambatan.create', compact('murids'));
     }
 
@@ -74,7 +76,7 @@ class KeterlambatanController extends Controller
         if (auth()->user()->role === 'Walikelas') {
             return redirect()->route('keterlambatan.index')->with('error', 'Anda tidak memiliki izin untuk menambahkan data keterlambatan.');
         }
-        
+
         $validated = $request->validate([
             'NIS' => ['required', 'exists:murid,NIS'],
             'tanggal' => ['required', 'date'],
@@ -83,6 +85,17 @@ class KeterlambatanController extends Controller
             'bukti' => ['nullable', 'image', 'max:2048'],
         ]);
 
+        // Validasi: 1 murid hanya bisa 1 keterlambatan per hari
+        $existingKeterlambatan = Keterlambatan::where('NIS', $validated['NIS'])
+            ->whereDate('tanggal', $validated['tanggal'])
+            ->first();
+
+        if ($existingKeterlambatan) {
+            return redirect()->back()
+                ->withErrors(['NIS' => 'Murid ini sudah memiliki data keterlambatan pada tanggal yang dipilih.'])
+                ->withInput();
+        }
+
         // Ambil data murid untuk snapshot NIS, nama_murid, gender, kelas, dan walikelas
         $murid = Murid::where('NIS', $validated['NIS'])->first();
         if ($murid) {
@@ -90,7 +103,7 @@ class KeterlambatanController extends Controller
             $validated['nama_murid'] = $murid->nama_lengkap; // Snapshot nama murid
             $validated['gender'] = $murid->gender; // Snapshot gender
             $validated['kelas'] = $murid->kelas; // Snapshot kelas
-            
+
             // Ambil walikelas dari kelas murid
             if ($murid->kelas) {
                 $kelasData = \App\Models\Kelas::where('kelas', $murid->kelas)->first();
@@ -104,7 +117,11 @@ class KeterlambatanController extends Controller
             $validated['bukti'] = $request->file('bukti')->store('bukti-keterlambatan', 'public');
         }
 
-        Keterlambatan::create($validated);
+        $keterlambatan = Keterlambatan::create($validated);
+
+        // Send notification to internal system
+        $notificationService = new KeterlambatanNotificationService;
+        $notificationService->sendNotification($keterlambatan);
 
         return redirect()->route('keterlambatan.index')->with('success', 'Data keterlambatan berhasil ditambahkan.');
     }
@@ -127,8 +144,9 @@ class KeterlambatanController extends Controller
         if (auth()->user()->role === 'Walikelas') {
             return redirect()->route('keterlambatan.index')->with('error', 'Anda tidak memiliki izin untuk mengubah data keterlambatan.');
         }
-        
+
         $murids = Murid::orderBy('nama_lengkap')->get();
+
         return view('keterlambatan.edit', compact('keterlambatan', 'murids'));
     }
 
@@ -141,7 +159,7 @@ class KeterlambatanController extends Controller
         if (auth()->user()->role === 'Walikelas') {
             return redirect()->route('keterlambatan.index')->with('error', 'Anda tidak memiliki izin untuk mengubah data keterlambatan.');
         }
-        
+
         $validated = $request->validate([
             'NIS' => ['required', 'exists:murid,NIS'],
             'tanggal' => ['required', 'date'],
@@ -149,6 +167,18 @@ class KeterlambatanController extends Controller
             'keterangan' => ['nullable', 'string'],
             'bukti' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        // Validasi: 1 murid hanya bisa 1 keterlambatan per hari (exclude record yang sedang diupdate)
+        $existingKeterlambatan = Keterlambatan::where('NIS', $validated['NIS'])
+            ->whereDate('tanggal', $validated['tanggal'])
+            ->where('id', '!=', $keterlambatan->id)
+            ->first();
+
+        if ($existingKeterlambatan) {
+            return redirect()->back()
+                ->withErrors(['NIS' => 'Murid ini sudah memiliki data keterlambatan pada tanggal yang dipilih.'])
+                ->withInput();
+        }
 
         // Snapshot tidak boleh diupdate jika NIS tidak berubah
         // Hanya update snapshot jika:
@@ -162,7 +192,7 @@ class KeterlambatanController extends Controller
                 $validated['nama_murid'] = $murid->nama_lengkap; // Snapshot nama murid
                 $validated['gender'] = $murid->gender; // Snapshot gender
                 $validated['kelas'] = $murid->kelas; // Snapshot kelas
-                
+
                 // Ambil walikelas dari kelas murid
                 if ($murid->kelas) {
                     $kelasData = \App\Models\Kelas::where('kelas', $murid->kelas)->first();
@@ -175,21 +205,21 @@ class KeterlambatanController extends Controller
                     $validated['username'] = null;
                 }
             }
-        } elseif (!$keterlambatan->kelas || !$keterlambatan->nama_murid || !$keterlambatan->gender) {
+        } elseif (! $keterlambatan->kelas || ! $keterlambatan->nama_murid || ! $keterlambatan->gender) {
             // NIS tidak berubah tapi belum ada snapshot lengkap, ambil snapshot dari data saat ini
             // (untuk data lama yang mungkin belum punya snapshot)
             $murid = Murid::where('NIS', $validated['NIS'])->first();
             if ($murid) {
-                if (!$keterlambatan->nama_murid) {
+                if (! $keterlambatan->nama_murid) {
                     $validated['nama_murid'] = $murid->nama_lengkap; // Snapshot nama murid
                 }
-                if (!$keterlambatan->gender) {
+                if (! $keterlambatan->gender) {
                     $validated['gender'] = $murid->gender; // Snapshot gender
                 }
-                if (!$keterlambatan->kelas) {
+                if (! $keterlambatan->kelas) {
                     $validated['kelas'] = $murid->kelas; // Snapshot kelas
                 }
-                
+
                 // Ambil walikelas dari kelas murid
                 if ($murid->kelas) {
                     $kelasData = \App\Models\Kelas::where('kelas', $murid->kelas)->first();
@@ -233,13 +263,14 @@ class KeterlambatanController extends Controller
         if (auth()->user()->role === 'Walikelas') {
             return redirect()->route('keterlambatan.index')->with('error', 'Anda tidak memiliki izin untuk menghapus data keterlambatan.');
         }
-        
+
         // Delete file if exists
         if ($keterlambatan->bukti) {
             Storage::disk('public')->delete($keterlambatan->bukti);
         }
-        
+
         $keterlambatan->delete();
+
         return redirect()->route('keterlambatan.index')->with('success', 'Data keterlambatan berhasil dihapus.');
     }
 
@@ -252,9 +283,10 @@ class KeterlambatanController extends Controller
         if ($murid) {
             return response()->json([
                 'success' => true,
-                'gender' => $murid->gender
+                'gender' => $murid->gender,
             ]);
         }
+
         return response()->json(['success' => false]);
     }
 }

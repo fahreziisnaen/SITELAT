@@ -188,16 +188,16 @@ class ReportController extends Controller
                         ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
                         ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
                         ->orderBy('nama_lengkap')
-                        ->get()
+                ->get()
                         ->map(function ($murid) {
-                            return [
-                                'NIS' => $murid->NIS,
-                                'nama_lengkap' => $murid->nama_lengkap,
-                                'gender' => $murid->gender,
-                                'kelas' => $murid->kelas,
+                return [
+                    'NIS' => $murid->NIS,
+                    'nama_lengkap' => $murid->nama_lengkap,
+                    'gender' => $murid->gender,
+                    'kelas' => $murid->kelas,
                                 'tanggal_keterlambatan' => '', // Tidak ada keterlambatan
-                            ];
-                        });
+                ];
+            });
 
                     // Selalu tambahkan kelas, meskipun tidak ada murid (untuk menampilkan semua kelas)
                     $dataByKelas[$kelasName] = $muridAktifKelas;
@@ -392,7 +392,7 @@ class ReportController extends Controller
             foreach ($drawingParts as $drawingPart) {
                 if ($drawingPart->parentNode) {
                     $drawingPart->parentNode->removeChild($drawingPart);
-                }
+    }
             }
 
             // Hapus elemen legacyDrawing jika ada

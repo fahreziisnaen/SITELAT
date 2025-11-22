@@ -12,6 +12,7 @@ return new class extends Migration
             $table->string('username')->primary();
             $table->string('password');
             $table->string('nama_lengkap');
+            $table->string('nomor_telepon')->nullable();
             $table->enum('role', ['Admin', 'TATIB', 'Walikelas']);
             $table->rememberToken();
             $table->timestamps();

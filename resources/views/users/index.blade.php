@@ -47,6 +47,7 @@
                                 <tr>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Username</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nama Lengkap</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nomor Telepon</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Role</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Aksi</th>
                                 </tr>
@@ -65,6 +66,7 @@
                                             </div>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">{{ $user->nama_lengkap }}</td>
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">{{ $user->nomor_telepon ?? '-' }}</td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full shadow-sm
                                                 {{ $user->role === 'Admin' ? 'bg-gradient-to-r from-green-400 to-green-500 text-white' : ($user->role === 'TATIB' ? 'bg-gradient-to-r from-purple-400 to-purple-500 text-white' : 'bg-gradient-to-r from-blue-400 to-blue-500 text-white') }}">
@@ -94,7 +96,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-6 py-12 text-center">
+                                        <td colspan="5" class="px-6 py-12 text-center">
                                             <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
                                             </svg>

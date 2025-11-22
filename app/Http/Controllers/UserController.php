@@ -18,6 +18,7 @@ class UserController extends Controller
         if ($user && $user->role === 'Walikelas') {
             return redirect()->route('dashboard')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
+
         return null;
     }
 
@@ -27,9 +28,12 @@ class UserController extends Controller
     public function index()
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $users = User::orderBy('username')->paginate(10);
+
         return view('users.index', compact('users'));
     }
 
@@ -39,16 +43,18 @@ class UserController extends Controller
     public function create()
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $user = auth()->user();
         $allowedRoles = ['Admin', 'TATIB', 'Walikelas'];
-        
+
         // Jika user adalah TATIB, hanya bisa membuat TATIB dan Walikelas
         if ($user->role === 'TATIB') {
             $allowedRoles = ['TATIB', 'Walikelas'];
         }
-        
+
         return view('users.create', compact('allowedRoles'));
     }
 
@@ -58,11 +64,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $user = auth()->user();
         $allowedRoles = ['Admin', 'TATIB', 'Walikelas'];
-        
+
         // Jika user adalah TATIB, tidak boleh membuat user dengan role Admin
         if ($user->role === 'TATIB') {
             $allowedRoles = ['TATIB', 'Walikelas'];
@@ -72,6 +80,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
+            'nomor_telepon' => ['nullable', 'string', 'max:20'],
             'role' => ['required', Rule::in($allowedRoles)],
         ]);
 
@@ -93,7 +102,9 @@ class UserController extends Controller
     public function show(User $user)
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         return view('users.show', compact('user'));
     }
@@ -104,22 +115,24 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $currentUser = auth()->user();
         $allowedRoles = ['Admin', 'TATIB', 'Walikelas'];
-        
+
         // Jika user adalah TATIB, hanya bisa mengubah ke TATIB dan Walikelas
         // Dan tidak boleh mengubah user yang sudah Admin
         if ($currentUser->role === 'TATIB') {
             $allowedRoles = ['TATIB', 'Walikelas'];
-            
+
             // Jika user yang akan diupdate adalah Admin, tidak boleh diubah
             if ($user->role === 'Admin') {
                 return redirect()->route('users.index')->with('error', 'Anda tidak memiliki izin untuk mengubah user dengan role Admin.');
             }
         }
-        
+
         return view('users.edit', compact('user', 'allowedRoles'));
     }
 
@@ -129,15 +142,17 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $currentUser = auth()->user();
         $allowedRoles = ['Admin', 'TATIB', 'Walikelas'];
-        
+
         // Jika user adalah TATIB, tidak boleh mengubah role menjadi Admin
         if ($currentUser->role === 'TATIB') {
             $allowedRoles = ['TATIB', 'Walikelas'];
-            
+
             // Jika user yang akan diupdate adalah Admin, tidak boleh diubah
             if ($user->role === 'Admin') {
                 return redirect()->back()->withErrors(['role' => 'Anda tidak memiliki izin untuk mengubah user dengan role Admin.'])->withInput();
@@ -148,6 +163,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->username, 'username')],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
+            'nomor_telepon' => ['nullable', 'string', 'max:20'],
             'role' => ['required', Rule::in($allowedRoles)],
         ]);
 
@@ -156,7 +172,7 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['role' => 'Anda tidak memiliki izin untuk mengubah role menjadi Admin.'])->withInput();
         }
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -173,9 +189,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $redirect = $this->checkWalikelasAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $user->delete();
+
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
     }
 }

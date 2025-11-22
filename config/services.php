@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'keterlambatan_notification' => [
+        'endpoint' => env('KETERLAMBATAN_NOTIFICATION_ENDPOINT'),
+    ],
+
 ];

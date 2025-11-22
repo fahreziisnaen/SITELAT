@@ -55,6 +55,22 @@
                             <x-input-error :messages="$errors->get('nama_lengkap')" class="mt-2" />
                         </div>
 
+                        <!-- Nomor Telepon -->
+                        <div>
+                            <label for="nomor_telepon" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                    </svg>
+                                </div>
+                                <input id="nomor_telepon" type="text" name="nomor_telepon" value="{{ old('nomor_telepon') }}"
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
+                                    placeholder="Masukkan nomor telepon">
+                            </div>
+                            <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-2" />
+                        </div>
+
                         <!-- Role -->
                         <div>
                             <label for="role" class="block text-sm font-semibold text-gray-700 mb-2">Role</label>

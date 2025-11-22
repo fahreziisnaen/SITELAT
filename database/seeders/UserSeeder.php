@@ -15,18 +15,21 @@ class UserSeeder extends Seeder
                 'username' => 'admin',
                 'password' => Hash::make('admin123'),
                 'nama_lengkap' => 'Administrator',
+                'nomor_telepon' => '081234567890',
                 'role' => 'Admin',
             ],
             [
                 'username' => 'tatib',
                 'password' => Hash::make('tatib123'),
                 'nama_lengkap' => 'Andi Prasetyo',
+                'nomor_telepon' => '081234567891',
                 'role' => 'TATIB',
             ],
             [
                 'username' => 'wali_x2',
                 'password' => Hash::make('password'),
                 'nama_lengkap' => 'Budi Santoso',
+                'nomor_telepon' => '081234567892',
                 'role' => 'Walikelas',
             ],
         ]);
