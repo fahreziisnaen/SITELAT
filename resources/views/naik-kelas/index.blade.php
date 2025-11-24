@@ -213,7 +213,8 @@
                 document.getElementById('muridTetapSection').classList.remove('hidden');
                 document.getElementById('excludeInfo').classList.remove('hidden');
                 document.getElementById('btnSubmit').disabled = true; // Disable sampai pilih murid
-                loadAllMurids();
+                // Jangan load data sekarang, tunggu sampai modal dibuka
+                // loadAllMurids(); // Dihapus - akan dimuat saat modal dibuka
             }
         });
 
@@ -229,11 +230,22 @@
 
         // Load semua murid aktif dari semua kelas
         function loadAllMurids() {
-            // Show loading state
+            // Show loading state - pastikan elemen ada
             const tbody = document.getElementById('muridTableBody');
-            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data murid...</td></tr>';
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data murid...</td></tr>';
+            }
 
-            fetch('{{ route('naik-kelas.get-murid-tetap') }}')
+            const url = '{{ route('naik-kelas.get-murid-tetap') }}';
+            
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            })
                 .then(response => {
                     // Check if response is ok
                     if (!response.ok) {
@@ -241,7 +253,7 @@
                         return response.json().then(data => {
                             throw new Error(data.error || `HTTP error! status: ${response.status}`);
                         }).catch(() => {
-                            throw new Error(`HTTP error! status: ${response.status}`);
+                            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
                         });
                     }
                     return response.json();
@@ -249,29 +261,61 @@
                 .then(data => {
                     if (data.success) {
                         allMurids = data.murids;
-                        renderMuridTable(data.murids);
+                        // Pastikan modal sudah terbuka sebelum render
+                        const modal = document.getElementById('modalMuridTetap');
+                        if (modal && !modal.classList.contains('hidden')) {
+                            renderMuridTable(data.murids);
+                            updateModalSelectedCount();
+                        }
                     } else {
                         // Handle backend error response
                         const errorMsg = data.error || 'Terjadi kesalahan saat memuat data murid.';
-                        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                        const tbody = document.getElementById('muridTableBody');
+                        if (tbody) {
+                            tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                        }
                         alert(errorMsg);
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    const errorMsg = error.message || 'Terjadi kesalahan saat memuat data murid. Silakan coba lagi atau hubungi administrator.';
-                    tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                    console.error('Error loading murid:', error);
+                    console.error('URL:', url);
+                    
+                    let errorMsg = 'Terjadi kesalahan saat memuat data murid.';
+                    
+                    // Handle specific error types
+                    if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                        errorMsg = 'Gagal terhubung ke server. Kemungkinan penyebab:\n\n' +
+                                   '1. Server tidak berjalan\n' +
+                                   '2. Koneksi internet terputus\n' +
+                                   '3. URL tidak valid\n\n' +
+                                   'Silakan refresh halaman dan coba lagi.';
+                    } else if (error.message) {
+                        errorMsg = error.message;
+                    }
+                    
+                    const tbody = document.getElementById('muridTableBody');
+                    if (tbody) {
+                        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                    }
                     alert(errorMsg);
                 });
         }
 
         // Open modal
         document.getElementById('btnBukaModal').addEventListener('click', function() {
-            if (allMurids.length === 0) {
-                loadAllMurids();
-            }
+            // Buka modal dulu
             document.getElementById('modalMuridTetap').classList.remove('hidden');
-            updateModalSelectedCount();
+            
+            // Jika data sudah ada, render langsung
+            if (allMurids.length > 0) {
+                renderMuridTable(allMurids);
+                updateModalSelectedCount();
+            } else {
+                // Jika belum ada, load data
+                loadAllMurids();
+                updateModalSelectedCount();
+            }
         });
 
         // Render murid table
