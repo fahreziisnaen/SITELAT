@@ -35,7 +35,18 @@
                         <!-- Tanggal -->
                         <div class="mb-4">
                             <x-input-label for="tanggal" :value="__('Tanggal')" />
-                            <x-text-input id="tanggal" class="block mt-1 w-full" type="date" name="tanggal" :value="old('tanggal', date('Y-m-d'))" required />
+                            @php
+                                // Only use old value if it exists (from validation error), otherwise use today
+                                $tanggalHiddenValue = old('tanggal');
+                                $hasOldValue = old('tanggal') !== null;
+                                if (!$hasOldValue) {
+                                    $tanggalHiddenValue = \Carbon\Carbon::today()->format('Y-m-d');
+                                }
+                            @endphp
+                            <x-text-input id="tanggal" class="block mt-1 w-full" type="text" name="tanggal_display" placeholder="DD/MM/YYYY" required />
+                            <input type="hidden" id="tanggal_hidden" name="tanggal" value="{{ $tanggalHiddenValue }}" required />
+                            <input type="hidden" id="has_old_value" value="{{ $hasOldValue ? '1' : '0' }}" />
+                            <p class="mt-1 text-sm text-gray-500">Format: DD/MM/YYYY</p>
                             <x-input-error :messages="$errors->get('tanggal')" class="mt-2" />
                         </div>
 
@@ -142,6 +153,8 @@
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         .select2-container--default .select2-selection--single {
             height: 42px;
@@ -164,6 +177,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -184,6 +200,64 @@
             // Trigger on page load if there's an old value
             if ($('#NIS').val()) {
                 $('#NIS').trigger('change');
+            }
+
+            // Initialize Flatpickr for date picker with Indonesian format
+            const tanggalInput = document.getElementById('tanggal');
+            const tanggalHidden = document.getElementById('tanggal_hidden');
+            const hasOldValueInput = document.getElementById('has_old_value');
+            const hasOldValue = hasOldValueInput && hasOldValueInput.value === '1';
+            
+            // Always use today's date as default
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day to avoid timezone issues
+            
+            // Get today's date string
+            const todayYear = today.getFullYear();
+            const todayMonth = String(today.getMonth() + 1).padStart(2, '0');
+            const todayDay = String(today.getDate()).padStart(2, '0');
+            const todayString = todayYear + '-' + todayMonth + '-' + todayDay;
+            
+            // Only use old value if it exists from validation error, otherwise always use today
+            let initialDateValue;
+            if (hasOldValue) {
+                // Use old value from validation error
+                initialDateValue = tanggalHidden.value;
+            } else {
+                // Always use today - force update hidden input
+                initialDateValue = todayString;
+                tanggalHidden.value = todayString;
+            }
+            
+            // Initialize Flatpickr with today's date (or old value if exists)
+            const flatpickrInstance = flatpickr(tanggalInput, {
+                dateFormat: 'd/m/Y',
+                locale: 'id',
+                defaultDate: initialDateValue,
+                allowInput: false, // Prevent manual input to avoid format issues
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Convert DD/MM/YYYY to YYYY-MM-DD for hidden input
+                    if (selectedDates.length > 0) {
+                        const date = selectedDates[0];
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        tanggalHidden.value = year + '-' + month + '-' + day;
+                    }
+                }
+            });
+            
+            // Force set today after initialization if no old value
+            if (!hasOldValue) {
+                // Immediately set to today
+                flatpickrInstance.setDate(today, false);
+                tanggalHidden.value = todayString;
+                
+                // Also set after a short delay to ensure it's applied
+                setTimeout(function() {
+                    flatpickrInstance.setDate(today, false);
+                    tanggalHidden.value = todayString;
+                }, 50);
             }
 
             // Handle image preview and camera/gallery selection
@@ -408,6 +482,18 @@
                 video.classList.remove('hidden');
                 capturedPreview.classList.add('hidden');
                 capturedPreview.src = '';
+            });
+
+            // Ensure hidden input is set before form submit
+            document.querySelector('form').addEventListener('submit', function(e) {
+                // If flatpickr has a selected date but hidden input is empty, set it
+                if (!tanggalHidden.value && flatpickrInstance.selectedDates.length > 0) {
+                    const date = flatpickrInstance.selectedDates[0];
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    tanggalHidden.value = year + '-' + month + '-' + day;
+                }
             });
         });
     </script>

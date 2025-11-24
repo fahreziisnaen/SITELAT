@@ -70,6 +70,17 @@ class MuridController extends Controller
             'kelas' => ['required', 'exists:kelas,kelas'],
         ]);
 
+        // Validasi: maksimal 40 murid per kelas
+        $muridCount = Murid::where('kelas', $validated['kelas'])
+            ->where('status', 'Aktif')
+            ->count();
+
+        if ($muridCount >= 40) {
+            return redirect()->back()
+                ->withErrors(['kelas' => 'Kelas ini sudah mencapai batas maksimal 40 murid.'])
+                ->withInput();
+        }
+
         Murid::create($validated);
 
         return redirect()->route('murid.index')->with('success', 'Murid berhasil ditambahkan.');
@@ -121,6 +132,20 @@ class MuridController extends Controller
             'gender' => ['required', Rule::in(['Laki-laki', 'Perempuan'])],
             'kelas' => ['required', 'exists:kelas,kelas'],
         ]);
+
+        // Validasi: maksimal 40 murid per kelas (hanya jika kelas berubah atau murid dipindahkan)
+        if ($murid->kelas !== $validated['kelas']) {
+            $muridCount = Murid::where('kelas', $validated['kelas'])
+                ->where('status', 'Aktif')
+                ->where('NIS', '!=', $murid->NIS) // Exclude murid yang sedang diupdate
+                ->count();
+
+            if ($muridCount >= 40) {
+                return redirect()->back()
+                    ->withErrors(['kelas' => 'Kelas tujuan sudah mencapai batas maksimal 40 murid.'])
+                    ->withInput();
+            }
+        }
 
         $murid->update($validated);
 
@@ -220,6 +245,17 @@ class MuridController extends Controller
             'file.max' => 'Ukuran file maksimal 10MB.',
         ]);
 
+        // Validasi: Import hanya bisa dilakukan jika kelas X kosong
+        $kelasX = Kelas::where('kelas', 'like', 'X-%')->pluck('kelas');
+        $muridKelasX = Murid::whereIn('kelas', $kelasX)
+            ->where('status', 'Aktif')
+            ->count();
+
+        if ($muridKelasX > 0) {
+            return redirect()->route('murid.import')
+                ->with('error', 'Import tidak dapat dilakukan karena masih ada murid di kelas X. Silakan naikkan kelas terlebih dahulu sebelum melakukan import murid baru.');
+        }
+
         $file = $request->file('file');
         $path = $file->getRealPath();
 
@@ -309,6 +345,18 @@ class MuridController extends Controller
                 // Check if NIS already exists
                 if (Murid::where('NIS', $nis)->exists()) {
                     $errors[] = "Baris $rowNumber: NIS '$nis' sudah ada";
+                    $skipCount++;
+
+                    continue;
+                }
+
+                // Validasi: maksimal 40 murid per kelas
+                $muridCount = Murid::where('kelas', $kelas)
+                    ->where('status', 'Aktif')
+                    ->count();
+
+                if ($muridCount >= 40) {
+                    $errors[] = "Baris $rowNumber: Kelas '$kelas' sudah mencapai batas maksimal 40 murid";
                     $skipCount++;
 
                     continue;

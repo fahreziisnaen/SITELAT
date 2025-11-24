@@ -37,6 +37,7 @@
                         <div class="mb-4">
                             <x-input-label for="tanggal" :value="__('Tanggal')" />
                             <x-text-input id="tanggal" class="block mt-1 w-full" type="date" name="tanggal" :value="old('tanggal', $keterlambatan->tanggal->format('Y-m-d'))" required />
+                            <p class="mt-1 text-sm text-gray-500">Format: DD/MM/YYYY (Tampilan: {{ $keterlambatan->tanggal->format('d/m/Y') }})</p>
                             <x-input-error :messages="$errors->get('tanggal')" class="mt-2" />
                         </div>
 

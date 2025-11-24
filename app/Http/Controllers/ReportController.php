@@ -89,6 +89,27 @@ class ReportController extends Controller
     }
 
     /**
+     * Index untuk Walikelas - form export report kelas
+     */
+    public function indexKelas(Request $request)
+    {
+        // Hanya Walikelas yang bisa mengakses
+        if (auth()->user()->role !== 'Walikelas') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $tahunRange = $request->input('tahun'); // Format: "2025-2026"
+
+        // Jika ada tahun ajaran yang dipilih, langsung export Excel
+        if ($tahunRange) {
+            return $this->exportKelas($request);
+        }
+
+        // Jika belum ada tahun ajaran, tampilkan form
+        return view('report.kelas', compact('tahunRange'));
+    }
+
+    /**
      * Export laporan semester ke Excel menggunakan OpenSpout dan ZipArchive
      * Lebih cepat karena tidak perlu memuat semua data dari template
      */
@@ -188,16 +209,16 @@ class ReportController extends Controller
                         ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
                         ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
                         ->orderBy('nama_lengkap')
-                ->get()
+                        ->get()
                         ->map(function ($murid) {
-                return [
-                    'NIS' => $murid->NIS,
-                    'nama_lengkap' => $murid->nama_lengkap,
-                    'gender' => $murid->gender,
-                    'kelas' => $murid->kelas,
+                            return [
+                                'NIS' => $murid->NIS,
+                                'nama_lengkap' => $murid->nama_lengkap,
+                                'gender' => $murid->gender,
+                                'kelas' => $murid->kelas,
                                 'tanggal_keterlambatan' => '', // Tidak ada keterlambatan
-                ];
-            });
+                            ];
+                        });
 
                     // Selalu tambahkan kelas, meskipun tidak ada murid (untuk menampilkan semua kelas)
                     $dataByKelas[$kelasName] = $muridAktifKelas;
@@ -392,7 +413,7 @@ class ReportController extends Controller
             foreach ($drawingParts as $drawingPart) {
                 if ($drawingPart->parentNode) {
                     $drawingPart->parentNode->removeChild($drawingPart);
-    }
+                }
             }
 
             // Hapus elemen legacyDrawing jika ada
@@ -574,5 +595,261 @@ class ReportController extends Controller
         $zipTemplate->addFromString("xl/worksheets/sheet{$newSheetId}.xml", $newSheetXml);
 
         $zipTemplate->close();
+    }
+
+    /**
+     * Export laporan kelas untuk Walikelas
+     * Hanya menampilkan kelas yang dipegang oleh Walikelas
+     */
+    public function exportKelas(Request $request)
+    {
+        // Hanya Walikelas yang bisa mengakses
+        if (auth()->user()->role !== 'Walikelas') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = auth()->user();
+        $tahunRange = $request->input('tahun'); // Format: "2025-2026"
+
+        if (! $tahunRange) {
+            return redirect()->route('report.kelas')
+                ->with('error', 'Tahun Ajaran harus dipilih.');
+        }
+
+        // Ambil kelas yang dipegang oleh Walikelas
+        $kelasWalikelas = Kelas::where('username', $user->username)->get();
+
+        if ($kelasWalikelas->isEmpty()) {
+            return redirect()->route('report.kelas')
+                ->with('error', 'Anda tidak memiliki kelas yang dipegang.');
+        }
+
+        // Parse tahun range untuk menghitung periode semester
+        $tahunParts = explode('-', $tahunRange);
+        $tahunAwal = (int) $tahunParts[0];
+        $tahunAkhir = (int) $tahunParts[1];
+
+        // Periode semester: Semester 1 (Juli-Desember tahun awal) dan Semester 2 (Januari-Juni tahun akhir)
+        $startDate = \Carbon\Carbon::create($tahunAwal, 7, 1)->format('Y-m-d'); // 1 Juli tahun awal
+        $endDate = \Carbon\Carbon::create($tahunAkhir, 6, 30)->format('Y-m-d'); // 30 Juni tahun akhir
+
+        // Template path untuk kelas
+        $templatePath = storage_path('template/template-kelas.xlsx');
+
+        if (! file_exists($templatePath)) {
+            return redirect()->route('report.kelas')
+                ->with('error', 'Template Excel tidak ditemukan. Pastikan file template ada di storage/template/template-kelas.xlsx');
+        }
+
+        // Set filename dan temp path
+        $kelasNames = $kelasWalikelas->pluck('kelas')->implode('_');
+        $filename = 'Laporan_Keterlambatan_Kelas_'.$kelasNames.'_'.$tahunRange.'_'.date('YmdHis').'.xlsx';
+        $tempPath = storage_path('app/temp/'.$filename);
+        if (! is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        // Copy template tanpa memuat isinya (sangat cepat)
+        copy($templatePath, $tempPath);
+
+        try {
+            // Ambil nama kelas yang dipegang
+            $kelasNamesArray = $kelasWalikelas->pluck('kelas')->toArray();
+
+            // Query keterlambatan dengan snapshot kelas yang dipegang oleh Walikelas
+            $keterlambatanQuery = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate])
+                ->whereNotNull('NIS')
+                ->whereNotNull('kelas')
+                ->whereIn('kelas', $kelasNamesArray) // Filter hanya kelas yang dipegang
+                ->select('NIS', 'nama_murid', 'gender', 'kelas', 'tanggal')
+                ->orderBy('kelas')
+                ->orderBy('nama_murid')
+                ->orderBy('tanggal')
+                ->get();
+
+            // Kelompokkan keterlambatan berdasarkan snapshot kelas
+            $keterlambatanByKelas = $keterlambatanQuery->groupBy('kelas');
+
+            // Ambil semua NIS yang punya keterlambatan (untuk menghindari duplikasi)
+            $nisWithKeterlambatan = $keterlambatanQuery->pluck('NIS')->unique();
+
+            // Buat struktur data untuk setiap kelas berdasarkan snapshot keterlambatan
+            $dataByKelas = [];
+            foreach ($keterlambatanByKelas as $snapshotKelas => $keterlambatanItems) {
+                // Kelompokkan keterlambatan per murid (NIS) dalam kelas ini
+                $keterlambatanPerMurid = $keterlambatanItems->groupBy('NIS')->map(function ($items) {
+                    $firstItem = $items->first();
+                    $tanggalKeterlambatan = $items->map(function ($item) {
+                        return \Carbon\Carbon::parse($item->tanggal)->format('n/j/Y');
+                    })->implode(',');
+
+                    return [
+                        'NIS' => $firstItem->NIS,
+                        'nama_lengkap' => $firstItem->nama_murid, // Dari snapshot
+                        'gender' => $firstItem->gender, // Dari snapshot
+                        'kelas' => $firstItem->kelas, // Dari snapshot
+                        'tanggal_keterlambatan' => $tanggalKeterlambatan,
+                    ];
+                })->values();
+
+                $dataByKelas[$snapshotKelas] = $keterlambatanPerMurid;
+            }
+
+            // Tambahkan murid aktif yang tidak punya keterlambatan untuk setiap kelas yang dipegang
+            foreach ($kelasWalikelas as $kelas) {
+                $kelasName = $kelas->kelas;
+
+                // Jika kelas ini belum ada di dataByKelas (tidak ada keterlambatan dengan snapshot kelas ini)
+                if (! isset($dataByKelas[$kelasName])) {
+                    // Ambil murid aktif di kelas ini yang tidak punya keterlambatan
+                    $muridAktifKelas = Murid::where('status', 'Aktif')
+                        ->where('kelas', $kelasName)
+                        ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
+                        ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
+                        ->orderBy('nama_lengkap')
+                        ->get()
+                        ->map(function ($murid) {
+                            return [
+                                'NIS' => $murid->NIS,
+                                'nama_lengkap' => $murid->nama_lengkap,
+                                'gender' => $murid->gender,
+                                'kelas' => $murid->kelas,
+                                'tanggal_keterlambatan' => '', // Tidak ada keterlambatan
+                            ];
+                        });
+
+                    $dataByKelas[$kelasName] = $muridAktifKelas;
+                }
+            }
+
+            // Sort kelas yang dipegang
+            $sortedKelas = $this->sortKelasNatural($kelasWalikelas);
+
+            // Buat sheet baru menggunakan OpenSpout ke file sementara
+            $newSheetPath = storage_path('app/temp/new_sheet_'.uniqid().'.xlsx');
+            $this->createDataMuridSheetKelas($newSheetPath, $tahunRange, $sortedKelas, $dataByKelas);
+
+            // Tambahkan sheet baru ke template menggunakan ZipArchive
+            $this->addSheetToTemplate($tempPath, $newSheetPath, 'Data Murid');
+
+            // Hapus file sheet sementara
+            if (file_exists($newSheetPath)) {
+                unlink($newSheetPath);
+            }
+
+            // Return download response
+            return response()->download($tempPath, $filename)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            // Cleanup on error
+            if (file_exists($tempPath)) {
+                unlink($tempPath);
+            }
+
+            return redirect()->route('report.kelas')
+                ->with('error', 'Gagal export Excel: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Buat sheet Data Murid untuk Walikelas (hanya kelas yang dipegang)
+     * Hanya generate 40 kolom untuk setiap kelas
+     */
+    private function createDataMuridSheetKelas($filePath, $tahunRange, $allKelas, $dataByKelas)
+    {
+        $options = new Options;
+        $options->setTempFolder(storage_path('app/temp'));
+        $writer = new Writer($options);
+        $writer->openToFile($filePath);
+
+        // Header style
+        $headerStyle = (new Style)
+            ->setFontBold()
+            ->setFontSize(14);
+
+        // Table header style
+        $tableHeaderStyle = (new Style)
+            ->setFontBold()
+            ->setFontSize(11)
+            ->setBackgroundColor(Color::rgb(68, 114, 196))
+            ->setFontColor(Color::rgb(255, 255, 255));
+
+        // Kelas header style
+        $kelasHeaderStyle = (new Style)
+            ->setFontBold()
+            ->setFontSize(12);
+
+        // Data style
+        $dataStyle = new Style;
+
+        // Center style untuk kolom No
+        $centerStyle = (new Style)
+            ->setCellAlignment(\OpenSpout\Common\Entity\Style\CellAlignment::CENTER);
+
+        // Judul
+        $writer->addRow(Row::fromValues(['DATA MURID AKTIF'], $headerStyle));
+        $writer->addRow(Row::fromValues(['TAHUN PELAJARAN'], $headerStyle));
+        $writer->addRow(Row::fromValues([$tahunRange], $headerStyle));
+        $writer->addRow(Row::fromValues([])); // Baris kosong
+
+        // Loop untuk setiap kelas yang dipegang
+        foreach ($allKelas as $kelas) {
+            $snapshotKelas = $kelas->kelas;
+
+            // Ambil walikelas
+            $walikelasNama = '-';
+            if ($kelas->username) {
+                $walikelas = User::where('username', $kelas->username)->first();
+                if ($walikelas) {
+                    $walikelasNama = $walikelas->nama_lengkap;
+                }
+            }
+
+            // Kelas dan Walikelas
+            $writer->addRow(Row::fromValues(['Kelas: '.$snapshotKelas], $kelasHeaderStyle));
+            $writer->addRow(Row::fromValues(['WALIKELAS: '.$walikelasNama], $kelasHeaderStyle));
+
+            // Header tabel
+            $writer->addRow(Row::fromValues([
+                'No',
+                'NIS',
+                'Nama Lengkap',
+                'Gender',
+                'Tanggal Keterlambatan',
+            ], $tableHeaderStyle));
+
+            // Ambil data murid untuk kelas ini
+            $muridKelas = $dataByKelas[$snapshotKelas] ?? collect();
+            $noMurid = 1;
+
+            // Generate hanya 40 baris untuk setiap kelas
+            for ($i = 0; $i < 40; $i++) {
+                if ($i < $muridKelas->count()) {
+                    // Ada data murid
+                    $murid = $muridKelas[$i];
+
+                    $writer->addRow(Row::fromValues([
+                        (string) $noMurid++,
+                        $murid['NIS'] ?? '-',
+                        $murid['nama_lengkap'] ?? '-',
+                        $murid['gender'] ?? '-',
+                        $murid['tanggal_keterlambatan'] ?? '',
+                    ], $dataStyle));
+                } else {
+                    // Baris kosong
+                    $writer->addRow(Row::fromValues([
+                        (string) $noMurid++,
+                        '',
+                        '',
+                        '',
+                        '',
+                    ], $dataStyle));
+                }
+            }
+
+            // Baris kosong antara kelas
+            $writer->addRow(Row::fromValues([]));
+        }
+
+        $writer->close();
     }
 }

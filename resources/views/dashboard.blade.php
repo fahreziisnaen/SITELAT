@@ -27,7 +27,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-2">Selamat Datang, {{ Auth::user()->nama_lengkap }}! 👋</h3>
-                        <p class="text-indigo-100 text-sm sm:text-base md:text-lg">Sistem Rekap Keterlambatan Siswa</p>
+                        <p class="text-indigo-100 text-sm sm:text-base md:text-lg">di Sistem Keterlambatan Siswa</p>
                     </div>
                     <div class="hidden md:block">
                         <svg class="w-24 h-24 lg:w-32 lg:h-32 opacity-20" fill="currentColor" viewBox="0 0 20 20">

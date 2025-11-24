@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -58,13 +60,20 @@
                         <div>
                             <label for="tanggal" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
                                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                 </div>
-                                <input id="tanggal" type="date" name="tanggal" value="{{ $tanggal ?? '' }}"
+                                @php
+                                    $tanggalValue = '';
+                                    if (isset($tanggal) && $tanggal) {
+                                        $tanggalValue = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggal)->format('d/m/Y');
+                                    }
+                                @endphp
+                                <input id="tanggal" type="text" name="tanggal_display" value="{{ $tanggalValue }}" placeholder="Pilih tanggal..."
                                     class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200">
+                                <input type="hidden" id="tanggal_hidden" name="tanggal" value="{{ $tanggal ?? '' }}">
                             </div>
                         </div>
 
@@ -179,12 +188,12 @@
                                         </td>
                                         <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap hidden sm:table-cell">
                                             @if($item->bukti)
-                                                <a href="{{ asset('storage/' . $item->bukti) }}" target="_blank" class="inline-flex items-center justify-center p-1.5 sm:p-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200" title="Lihat Bukti">
+                                                <button type="button" onclick="openBuktiModal('{{ asset('storage/' . $item->bukti) }}')" class="inline-flex items-center justify-center p-1.5 sm:p-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200" title="Lihat Bukti">
                                                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                                     </svg>
-                                                </a>
+                                                </button>
                                             @else
                                                 <span class="text-gray-400 text-xs">-</span>
                                             @endif
@@ -232,4 +241,114 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Preview Bukti -->
+    <div id="buktiModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true" onclick="closeBuktiModal()"></div>
+
+            <!-- Modal panel -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Preview Bukti Keterlambatan</h3>
+                        <button type="button" onclick="closeBuktiModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <img id="buktiImage" src="" alt="Bukti Keterlambatan" class="max-w-full h-auto mx-auto rounded-lg shadow-lg">
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="closeBuktiModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors duration-200">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+
+    <script>
+        function openBuktiModal(imageUrl) {
+            document.getElementById('buktiImage').src = imageUrl;
+            document.getElementById('buktiModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBuktiModal() {
+            document.getElementById('buktiModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeBuktiModal();
+            }
+        });
+
+        // Initialize Flatpickr for date filter
+        document.addEventListener('DOMContentLoaded', function() {
+            const tanggalInput = document.getElementById('tanggal');
+            const tanggalHidden = document.getElementById('tanggal_hidden');
+            
+            if (tanggalInput && tanggalHidden) {
+                // Get initial value
+                let initialDateValue = '';
+                if (tanggalHidden.value) {
+                    try {
+                        const date = new Date(tanggalHidden.value + 'T00:00:00');
+                        if (!isNaN(date.getTime())) {
+                            initialDateValue = tanggalHidden.value;
+                        }
+                    } catch (e) {
+                        // Invalid date, use empty
+                    }
+                }
+                
+                const flatpickrInstance = flatpickr(tanggalInput, {
+                    dateFormat: 'd/m/Y',
+                    locale: 'id',
+                    defaultDate: initialDateValue || null,
+                    allowInput: false,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        // Convert DD/MM/YYYY to YYYY-MM-DD for hidden input
+                        if (selectedDates.length > 0) {
+                            const date = selectedDates[0];
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            tanggalHidden.value = year + '-' + month + '-' + day;
+                        } else {
+                            tanggalHidden.value = '';
+                        }
+                    }
+                });
+                
+                // Update hidden input on form submit
+                const form = document.querySelector('form[method="GET"]');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        if (flatpickrInstance.selectedDates.length > 0) {
+                            const date = flatpickrInstance.selectedDates[0];
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            tanggalHidden.value = year + '-' + month + '-' + day;
+                        } else {
+                            tanggalHidden.value = '';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
 </x-app-layout>

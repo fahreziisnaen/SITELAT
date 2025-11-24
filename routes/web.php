@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
 
     // Report
     Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/report/kelas', [ReportController::class, 'indexKelas'])->name('report.kelas');
 
     // Naik Kelas
     Route::get('/naik-kelas', [NaikKelasController::class, 'index'])->name('naik-kelas.index');
