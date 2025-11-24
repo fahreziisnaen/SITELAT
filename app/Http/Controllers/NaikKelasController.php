@@ -6,6 +6,7 @@ use App\Models\Kelas;
 use App\Models\Murid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class NaikKelasController extends Controller
 {
@@ -15,9 +16,10 @@ class NaikKelasController extends Controller
     private function checkAdminAccess()
     {
         $user = auth()->user();
-        if (!$user || $user->role !== 'Admin') {
+        if (! $user || $user->role !== 'Admin') {
             return redirect()->route('dashboard')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini. Hanya Admin yang dapat mengakses.');
         }
+
         return null;
     }
 
@@ -27,7 +29,9 @@ class NaikKelasController extends Controller
     public function index()
     {
         $redirect = $this->checkAdminAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         return view('naik-kelas.index');
     }
@@ -37,27 +41,44 @@ class NaikKelasController extends Controller
      */
     public function getMuridTetap(Request $request)
     {
-        $redirect = $this->checkAdminAccess();
-        if ($redirect) return $redirect;
+        // Check access - return JSON error jika bukan Admin
+        $user = auth()->user();
+        if (! $user || $user->role !== 'Admin') {
+            return response()->json([
+                'success' => false,
+                'error' => 'Anda tidak memiliki izin untuk mengakses halaman ini. Hanya Admin yang dapat mengakses.',
+            ], 403);
+        }
 
-        // Ambil semua murid aktif dari semua kelas
-        $murids = Murid::where('status', 'Aktif')
-            ->whereNotNull('kelas')
-            ->orderBy('kelas')
-            ->orderBy('nama_lengkap')
-            ->get();
+        try {
+            // Ambil semua murid aktif dari semua kelas
+            $murids = Murid::where('status', 'Aktif')
+                ->whereNotNull('kelas')
+                ->orderBy('kelas')
+                ->orderBy('nama_lengkap')
+                ->get();
 
-        return response()->json([
-            'success' => true,
-            'murids' => $murids->map(function ($murid) {
-                return [
-                    'NIS' => $murid->NIS,
-                    'nama_lengkap' => $murid->nama_lengkap,
-                    'gender' => $murid->gender,
-                    'kelas' => $murid->kelas,
-                ];
-            }),
-        ]);
+            return response()->json([
+                'success' => true,
+                'murids' => $murids->map(function ($murid) {
+                    return [
+                        'NIS' => $murid->NIS,
+                        'nama_lengkap' => $murid->nama_lengkap,
+                        'gender' => $murid->gender,
+                        'kelas' => $murid->kelas,
+                    ];
+                }),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error loading murid untuk naik kelas: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Terjadi kesalahan saat memuat data murid. Silakan coba lagi atau hubungi administrator.',
+            ], 500);
+        }
     }
 
     /**
@@ -66,7 +87,9 @@ class NaikKelasController extends Controller
     public function processNaikKelas(Request $request)
     {
         $redirect = $this->checkAdminAccess();
-        if ($redirect) return $redirect;
+        if ($redirect) {
+            return $redirect;
+        }
 
         $request->validate([
             'ada_murid_tetap' => ['required', 'in:ya,tidak'],
@@ -101,8 +124,8 @@ class NaikKelasController extends Controller
             foreach ($muridsByKelas as $currentKelas => $murids) {
                 // Tentukan kelas baru berdasarkan kelas saat ini
                 $newKelas = $this->getNextKelas($currentKelas);
-                
-                if (!$newKelas) {
+
+                if (! $newKelas) {
                     // Skip jika format kelas tidak valid
                     continue;
                 }
@@ -113,6 +136,7 @@ class NaikKelasController extends Controller
                         // Jika murid termasuk dalam murid tetap, skip
                         if (in_array($murid->NIS, $muridTetap)) {
                             $skippedCount++;
+
                             continue;
                         }
 
@@ -126,8 +150,8 @@ class NaikKelasController extends Controller
                 } else {
                     // Cek apakah kelas baru sudah ada di database
                     $kelasExists = Kelas::where('kelas', $newKelas)->exists();
-                    
-                    if (!$kelasExists) {
+
+                    if (! $kelasExists) {
                         // Jika kelas baru belum ada, buat kelas baru dengan username yang sama
                         $oldKelas = Kelas::where('kelas', $currentKelas)->first();
                         if ($oldKelas) {
@@ -149,6 +173,7 @@ class NaikKelasController extends Controller
                         // Jika murid termasuk dalam murid tetap, skip
                         if (in_array($murid->NIS, $muridTetap)) {
                             $skippedCount++;
+
                             continue;
                         }
 
@@ -163,17 +188,18 @@ class NaikKelasController extends Controller
             DB::commit();
 
             $message = 'Proses naik kelas berhasil dilakukan. ';
-            $message .= $processedCount . ' murid dinaikkan/luluskan.';
+            $message .= $processedCount.' murid dinaikkan/luluskan.';
             if ($skippedCount > 0) {
-                $message .= ' ' . $skippedCount . ' murid tetap di kelas yang sama.';
+                $message .= ' '.$skippedCount.' murid tetap di kelas yang sama.';
             }
 
             return redirect()->route('naik-kelas.index')
                 ->with('success', $message);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat memproses naik kelas: ' . $e->getMessage())
+                ->with('error', 'Terjadi kesalahan saat memproses naik kelas: '.$e->getMessage())
                 ->withInput();
         }
     }
@@ -193,16 +219,15 @@ class NaikKelasController extends Controller
 
         // Cek apakah kelas adalah XI
         if (preg_match('/^XI-(\d+)$/', $currentKelas, $matches)) {
-            return 'XII-' . $matches[1];
+            return 'XII-'.$matches[1];
         }
 
         // Cek apakah kelas adalah X
         if (preg_match('/^X-(\d+)$/', $currentKelas, $matches)) {
-            return 'XI-' . $matches[1];
+            return 'XI-'.$matches[1];
         }
 
         // Jika format tidak sesuai, return null
         return null;
     }
 }
-

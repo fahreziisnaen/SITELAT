@@ -229,17 +229,39 @@
 
         // Load semua murid aktif dari semua kelas
         function loadAllMurids() {
+            // Show loading state
+            const tbody = document.getElementById('muridTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data murid...</td></tr>';
+
             fetch('{{ route('naik-kelas.get-murid-tetap') }}')
-                .then(response => response.json())
+                .then(response => {
+                    // Check if response is ok
+                    if (!response.ok) {
+                        // Try to parse error response
+                        return response.json().then(data => {
+                            throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                        }).catch(() => {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         allMurids = data.murids;
                         renderMuridTable(data.murids);
+                    } else {
+                        // Handle backend error response
+                        const errorMsg = data.error || 'Terjadi kesalahan saat memuat data murid.';
+                        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                        alert(errorMsg);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Terjadi kesalahan saat memuat data murid.');
+                    const errorMsg = error.message || 'Terjadi kesalahan saat memuat data murid. Silakan coba lagi atau hubungi administrator.';
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                    alert(errorMsg);
                 });
         }
 
