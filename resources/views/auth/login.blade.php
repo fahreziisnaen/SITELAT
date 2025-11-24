@@ -6,8 +6,8 @@
     <title>SILAMBAT - SMAN 21 KOTA SURABAYA</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/sman21surabaya.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/sman21surabaya.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

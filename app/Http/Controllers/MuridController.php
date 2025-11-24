@@ -7,6 +7,11 @@ use App\Models\Murid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Reader\XLSX\Reader;
+use OpenSpout\Writer\XLSX\Options;
+use OpenSpout\Writer\XLSX\Writer;
 
 class MuridController extends Controller
 {
@@ -190,7 +195,7 @@ class MuridController extends Controller
     }
 
     /**
-     * Download template CSV file.
+     * Download template Excel file.
      */
     public function downloadTemplate()
     {
@@ -199,31 +204,48 @@ class MuridController extends Controller
             return $redirect;
         }
 
-        $filename = 'template_import_murid.csv';
-        $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
-        ];
+        $filename = 'template_import_murid.xlsx';
+        $tempPath = storage_path('app/temp/'.$filename);
 
-        $callback = function () {
-            $file = fopen('php://output', 'w');
+        // Pastikan direktori temp ada
+        if (! is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
 
-            // Add BOM for Excel compatibility
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+        try {
+            // Setup OpenSpout writer
+            $options = new Options;
+            $options->setTempFolder(storage_path('app/temp'));
+            $writer = new Writer($options);
+            $writer->openToFile($tempPath);
 
-            // Header
-            fputcsv($file, ['NIS', 'Nama Lengkap', 'Gender', 'Kelas']);
+            // Header style (bold)
+            $headerStyle = (new Style)
+                ->setFontBold()
+                ->setFontSize(11);
+
+            // Write header
+            $writer->addRow(Row::fromValues(['NIS', 'Nama Lengkap', 'Gender', 'Kelas'], $headerStyle));
 
             // Sample data (Gender: L untuk Laki-laki, P untuk Perempuan)
-            fputcsv($file, ['1234567890', 'Andi Prasetyo', 'L', 'X-1']);
-            fputcsv($file, ['1234567891', 'Siti Nurhaliza', 'P', 'X-2']);
-            fputcsv($file, ['1234567892', 'Budi Santoso', 'L', 'XI-1']);
-            fputcsv($file, ['1234567893', 'Dewi Lestari', 'P', 'XI-2']);
+            $writer->addRow(Row::fromValues(['1234567890', 'Andi Prasetyo', 'L', 'X-1']));
+            $writer->addRow(Row::fromValues(['1234567891', 'Siti Nurhaliza', 'P', 'X-2']));
+            $writer->addRow(Row::fromValues(['1234567892', 'Budi Santoso', 'L', 'XI-1']));
+            $writer->addRow(Row::fromValues(['1234567893', 'Dewi Lestari', 'P', 'XI-2']));
 
-            fclose($file);
-        };
+            $writer->close();
 
-        return response()->stream($callback, 200, $headers);
+            // Return download response
+            return response()->download($tempPath, $filename)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            // Cleanup on error
+            if (file_exists($tempPath)) {
+                unlink($tempPath);
+            }
+
+            return redirect()->route('murid.import')
+                ->with('error', 'Gagal download template: '.$e->getMessage());
+        }
     }
 
     /**
@@ -237,11 +259,11 @@ class MuridController extends Controller
         }
 
         $request->validate([
-            'file' => ['required', 'file', 'mimes:csv,txt', 'max:10240'], // Max 10MB
+            'file' => ['required', 'file', 'mimes:csv,txt,xlsx', 'max:10240'], // Max 10MB
         ], [
             'file.required' => 'File harus diupload.',
             'file.file' => 'File tidak valid.',
-            'file.mimes' => 'File harus berformat CSV atau TXT.',
+            'file.mimes' => 'File harus berformat CSV, TXT, atau Excel (.xlsx).',
             'file.max' => 'Ukuran file maksimal 10MB.',
         ]);
 
@@ -258,6 +280,7 @@ class MuridController extends Controller
 
         $file = $request->file('file');
         $path = $file->getRealPath();
+        $extension = strtolower($file->getClientOriginalExtension());
 
         $errors = [];
         $successCount = 0;
@@ -265,34 +288,74 @@ class MuridController extends Controller
         $rowNumber = 0;
 
         try {
-            // Read file content and remove BOM if present
-            $content = file_get_contents($path);
-            if (substr($content, 0, 3) === "\xEF\xBB\xBF") {
-                $content = substr($content, 3);
-                file_put_contents($path, $content);
-            }
-
-            // Open file with UTF-8 encoding support
-            $handle = fopen($path, 'r');
-            if ($handle === false) {
-                return redirect()->route('murid.import')->with('error', 'Gagal membuka file.');
-            }
-
-            // Skip header row
-            $header = fgetcsv($handle, 1000, ',');
-            $rowNumber++;
-
             // Expected header format: NIS, Nama Lengkap, Gender, Kelas
             $expectedHeaders = ['NIS', 'Nama Lengkap', 'Gender', 'Kelas'];
-            if (! $header || count($header) < 4) {
-                fclose($handle);
+            $header = null;
+            $rows = [];
 
+            // Read file based on extension
+            if ($extension === 'xlsx') {
+                // Read Excel file using OpenSpout
+                $reader = Reader::createFromFile($path);
+                $reader->open($path);
+
+                $rowIndex = 0;
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        $rowIndex++;
+                        $rowData = [];
+                        foreach ($row->getCells() as $cell) {
+                            $rowData[] = $cell->getValue();
+                        }
+
+                        if ($rowIndex === 1) {
+                            // First row is header
+                            $header = $rowData;
+                        } else {
+                            // Data rows
+                            $rows[] = $rowData;
+                        }
+                    }
+                    // Only read first sheet
+                    break;
+                }
+
+                $reader->close();
+            } else {
+                // Read CSV file
+                // Read file content and remove BOM if present
+                $content = file_get_contents($path);
+                if (substr($content, 0, 3) === "\xEF\xBB\xBF") {
+                    $content = substr($content, 3);
+                    file_put_contents($path, $content);
+                }
+
+                // Open file with UTF-8 encoding support
+                $handle = fopen($path, 'r');
+                if ($handle === false) {
+                    return redirect()->route('murid.import')->with('error', 'Gagal membuka file.');
+                }
+
+                // Read header row
+                $header = fgetcsv($handle, 1000, ',');
+
+                // Read data rows
+                while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                    $rows[] = $row;
+                }
+
+                fclose($handle);
+            }
+
+            // Validate header
+            if (! $header || count($header) < 4) {
                 return redirect()->route('murid.import')->with('error', 'Format file tidak valid. Pastikan file memiliki header: NIS, Nama Lengkap, Gender, Kelas');
             }
 
             DB::beginTransaction();
 
-            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+            // Process rows
+            foreach ($rows as $row) {
                 $rowNumber++;
 
                 // Skip empty rows
@@ -308,10 +371,10 @@ class MuridController extends Controller
                     continue;
                 }
 
-                $nis = trim($row[0]);
-                $namaLengkap = trim($row[1]);
-                $gender = trim($row[2]);
-                $kelas = trim($row[3]);
+                $nis = trim($row[0] ?? '');
+                $namaLengkap = trim($row[1] ?? '');
+                $gender = trim($row[2] ?? '');
+                $kelas = trim($row[3] ?? '');
 
                 // Validate required fields
                 if (empty($nis) || empty($namaLengkap) || empty($gender) || empty($kelas)) {
@@ -379,7 +442,6 @@ class MuridController extends Controller
                 }
             }
 
-            fclose($handle);
             DB::commit();
 
             $message = "Import selesai! Berhasil: $successCount, Gagal/Dilewati: $skipCount";
@@ -397,9 +459,6 @@ class MuridController extends Controller
             }
 
         } catch (\Exception $e) {
-            if (isset($handle) && is_resource($handle)) {
-                fclose($handle);
-            }
             DB::rollBack();
 
             return redirect()->route('murid.import')->with('error', 'Terjadi kesalahan saat membaca file: '.$e->getMessage());
