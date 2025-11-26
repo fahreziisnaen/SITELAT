@@ -71,42 +71,36 @@
                                     </svg>
                                     <div class="flex-1">
                                         <h4 class="text-sm font-semibold text-yellow-800 mb-1">Pilih Murid Tetap (Tinggal Kelas)</h4>
-                                        <p class="text-xs text-yellow-700">Centang murid dari semua kelas yang tidak naik kelas</p>
+                                        <p class="text-xs text-yellow-700">Pilih murid dari semua kelas yang tidak naik kelas</p>
                                     </div>
+                                    <button type="button" id="btnBukaModal" class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                        Buka Daftar
+                                    </button>
                                 </div>
                             </div>
                             
-                            <!-- Daftar Murid dengan Checkbox -->
-                            <div class="bg-white border border-gray-200 rounded-lg p-4 max-h-96 overflow-y-auto">
-                                <div class="mb-3 flex items-center justify-between">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                        <span class="ml-2 text-sm font-semibold text-gray-700">Pilih Semua</span>
-                                    </label>
-                                    <span class="text-sm text-gray-600">
-                                        Total dipilih: <span id="selectedCount" class="font-semibold text-indigo-600">0</span> murid
-                                    </span>
-                                </div>
-                                
-                                <div class="space-y-2">
-                                    @forelse($murids as $murid)
-                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
-                                            <input type="checkbox" name="murid_tetap[]" value="{{ $murid->NIS }}" 
-                                                class="murid-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                            <div class="ml-3 flex-1">
-                                                <div class="flex items-center gap-3">
-                                                    <span class="text-sm font-mono text-gray-600">{{ $murid->NIS }}</span>
-                                                    <span class="text-sm font-medium text-gray-900">{{ $murid->nama_lengkap }}</span>
-                                                    <span class="text-xs text-gray-500">{{ $murid->gender }}</span>
-                                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold">{{ $murid->kelas }}</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    @empty
-                                        <p class="text-sm text-gray-500 text-center py-4">Tidak ada murid aktif</p>
-                                    @endforelse
+                            <div id="selectedMuridInfo" class="hidden bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <p class="text-sm text-gray-700">
+                                        <span class="font-semibold text-indigo-600" id="selectedCount">0</span> murid dipilih sebagai murid tetap (tinggal kelas)
+                                    </p>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Hidden Input untuk Murid Tetap -->
+                        <div id="muridTetapInputs">
+                            @if(old('murid_tetap'))
+                                @foreach(old('murid_tetap') as $nis)
+                                    <input type="hidden" name="murid_tetap[]" value="{{ $nis }}">
+                                @endforeach
+                            @endif
                         </div>
 
                         <!-- Info Proses -->
@@ -145,13 +139,94 @@
         </div>
     </div>
 
+    <!-- Modal Pilih Murid Tetap -->
+    <div id="modalMuridTetap" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 shadow-lg rounded-2xl bg-white max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    Pilih Murid Tetap (Tinggal Kelas) - Semua Kelas
+                </h3>
+                <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="mb-4">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchMurid" placeholder="Cari murid berdasarkan NIS, nama, atau kelas..." 
+                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Daftar Murid -->
+            <div class="flex-1 overflow-y-auto border border-gray-200 rounded-lg p-4">
+                <div id="emptyState" class="text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <p class="mt-4 text-sm text-gray-500">Ketik nama, NIS, atau kelas untuk mencari murid</p>
+                </div>
+                
+                <div id="muridList" class="space-y-2 hidden">
+                    @forelse($murids as $murid)
+                        <label class="murid-item flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer" 
+                            data-nis="{{ $murid->NIS }}" 
+                            data-nama="{{ strtolower($murid->nama_lengkap) }}" 
+                            data-kelas="{{ strtolower($murid->kelas) }}">
+                            <input type="checkbox" name="murid_tetap[]" value="{{ $murid->NIS }}" 
+                                class="murid-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center gap-3 flex-wrap">
+                                    <span class="text-sm font-mono text-gray-600">{{ $murid->NIS }}</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ $murid->nama_lengkap }}</span>
+                                    <span class="text-xs text-gray-500">{{ $murid->gender }}</span>
+                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold">{{ $murid->kelas }}</span>
+                                </div>
+                            </div>
+                        </label>
+                    @empty
+                        <p class="text-sm text-gray-500 text-center py-4">Tidak ada murid aktif</p>
+                    @endforelse
+                </div>
+                
+                <div id="noResults" class="hidden text-center py-8">
+                    <p class="text-sm text-gray-500">Tidak ada murid yang ditemukan</p>
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
+                <div class="text-sm text-gray-600">
+                    Total dipilih: <span id="modalSelectedCountBottom" class="font-semibold text-indigo-600">0</span> murid
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" id="cancelModal" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors">
+                        Batal
+                    </button>
+                    <button type="button" id="saveMuridTetap" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">
+                        Simpan Pilihan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Handle radio button selection
         document.getElementById('radioYa').addEventListener('change', function() {
             if (this.checked) {
                 document.getElementById('muridTetapSection').classList.remove('hidden');
                 document.getElementById('excludeInfo').classList.remove('hidden');
-                updateSelectedCount();
             }
         });
 
@@ -159,47 +234,159 @@
             if (this.checked) {
                 document.getElementById('muridTetapSection').classList.add('hidden');
                 document.getElementById('excludeInfo').classList.add('hidden');
-                // Uncheck all checkboxes
+                document.getElementById('selectedMuridInfo').classList.add('hidden');
+                // Clear all selections
                 document.querySelectorAll('.murid-checkbox').forEach(cb => cb.checked = false);
-                document.getElementById('selectAll').checked = false;
+                updateMuridTetapInputs();
                 updateSelectedCount();
             }
         });
 
-        // Select All functionality
-        const selectAll = document.getElementById('selectAll');
-        if (selectAll) {
-            selectAll.addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('.murid-checkbox');
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-                updateSelectedCount();
+        // Open modal
+        document.getElementById('btnBukaModal').addEventListener('click', function() {
+            // Pastikan semua checkbox tidak tercentang dulu
+            document.querySelectorAll('.murid-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
             });
-        }
-
-        // Update selected count
-        function updateSelectedCount() {
-            const checkboxes = document.querySelectorAll('.murid-checkbox:checked');
-            const count = checkboxes.length;
-            const countEl = document.getElementById('selectedCount');
-            if (countEl) {
-                countEl.textContent = count;
+            
+            // Sync checkbox di modal dengan hidden inputs yang sudah ada (jika ada)
+            const existingInputs = document.querySelectorAll('#muridTetapInputs input[name="murid_tetap[]"]');
+            const selectedNIS = Array.from(existingInputs).map(input => input.value);
+            
+            // Update checkbox di modal - hanya centang yang sudah dipilih sebelumnya
+            if (selectedNIS.length > 0) {
+                document.querySelectorAll('.murid-checkbox').forEach(checkbox => {
+                    if (selectedNIS.includes(checkbox.value)) {
+                        checkbox.checked = true;
+                    }
+                });
             }
             
-            // Update select all checkbox
-            const allCheckboxes = document.querySelectorAll('.murid-checkbox');
-            if (selectAll && allCheckboxes.length > 0) {
-                selectAll.checked = count === allCheckboxes.length;
-            }
+            // Reset search dan tampilkan empty state
+            document.getElementById('searchMurid').value = '';
+            document.getElementById('emptyState').classList.remove('hidden');
+            document.getElementById('muridList').classList.add('hidden');
+            document.getElementById('noResults').classList.add('hidden');
+            
+            document.getElementById('modalMuridTetap').classList.remove('hidden');
+            updateModalSelectedCount();
+            
+            // Focus ke search box
+            setTimeout(() => {
+                document.getElementById('searchMurid').focus();
+            }, 100);
+        });
+
+        // Close modal
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('cancelModal').addEventListener('click', closeModal);
+
+        function closeModal() {
+            document.getElementById('modalMuridTetap').classList.add('hidden');
         }
+
+        // Search functionality
+        document.getElementById('searchMurid').addEventListener('input', function() {
+            const searchTerm = this.value.trim().toLowerCase();
+            const items = document.querySelectorAll('.murid-item');
+            const emptyState = document.getElementById('emptyState');
+            const muridList = document.getElementById('muridList');
+            const noResults = document.getElementById('noResults');
+            
+            // Jika search kosong, sembunyikan semua
+            if (searchTerm === '') {
+                emptyState.classList.remove('hidden');
+                muridList.classList.add('hidden');
+                noResults.classList.add('hidden');
+                return;
+            }
+            
+            // Tampilkan list, sembunyikan empty state
+            emptyState.classList.add('hidden');
+            muridList.classList.remove('hidden');
+            
+            let visibleCount = 0;
+            
+            items.forEach(item => {
+                const nis = item.dataset.nis.toLowerCase();
+                const nama = item.dataset.nama;
+                const kelas = item.dataset.kelas;
+                
+                if (nis.includes(searchTerm) || nama.includes(searchTerm) || kelas.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Tampilkan "tidak ada hasil" jika tidak ada yang match
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        });
 
         // Update count when checkbox changes
         document.addEventListener('change', function(e) {
             if (e.target.classList.contains('murid-checkbox')) {
-                updateSelectedCount();
+                updateModalSelectedCount();
             }
         });
+
+        // Update modal selected count
+        function updateModalSelectedCount() {
+            const checkboxes = document.querySelectorAll('.murid-checkbox:checked');
+            const count = checkboxes.length;
+            
+            const countEl = document.getElementById('modalSelectedCount');
+            const countElBottom = document.getElementById('modalSelectedCountBottom');
+            if (countEl) countEl.textContent = count;
+            if (countElBottom) countElBottom.textContent = count;
+        }
+
+        // Save murid tetap
+        document.getElementById('saveMuridTetap').addEventListener('click', function() {
+            closeModal();
+            updateMuridTetapInputs();
+            updateSelectedCount();
+        });
+
+        // Update hidden inputs untuk murid tetap
+        function updateMuridTetapInputs() {
+            const container = document.getElementById('muridTetapInputs');
+            container.innerHTML = '';
+            
+            // Hanya ambil checkbox yang tercentang dan terlihat (tidak hidden)
+            const checkedBoxes = Array.from(document.querySelectorAll('.murid-checkbox:checked')).filter(checkbox => {
+                const item = checkbox.closest('.murid-item');
+                return item && item.style.display !== 'none';
+            });
+            
+            checkedBoxes.forEach(checkbox => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'murid_tetap[]';
+                input.value = checkbox.value;
+                container.appendChild(input);
+            });
+        }
+
+        // Update info murid yang dipilih di form utama
+        function updateSelectedCount() {
+            const checkedBoxes = document.querySelectorAll('.murid-checkbox:checked');
+            const count = checkedBoxes.length;
+            const infoSection = document.getElementById('selectedMuridInfo');
+            const countEl = document.getElementById('selectedCount');
+            
+            if (count > 0) {
+                infoSection.classList.remove('hidden');
+                if (countEl) countEl.textContent = count;
+            } else {
+                infoSection.classList.add('hidden');
+            }
+        }
 
         // Form submit dengan konfirmasi
         document.getElementById('naikKelasForm').addEventListener('submit', function(e) {
@@ -219,7 +406,8 @@
             confirmMessage += `• Kelas XII-* akan lulus\n\n`;
             
             if (adaMuridTetap.value === 'ya') {
-                const selectedCount = document.querySelectorAll('.murid-checkbox:checked').length;
+                const selectedInputs = document.querySelectorAll('input[name="murid_tetap[]"]');
+                const selectedCount = selectedInputs.length;
                 if (selectedCount === 0) {
                     alert('Anda memilih "Iya" tetapi belum memilih murid tetap. Silakan pilih murid tetap terlebih dahulu atau pilih "Tidak".');
                     return;
