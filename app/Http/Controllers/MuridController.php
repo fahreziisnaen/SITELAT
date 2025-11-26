@@ -311,13 +311,14 @@ class MuridController extends Controller
             // Read file based on extension
             if ($extension === 'xlsx') {
                 // Read Excel file using OpenSpout
-                $reader = Reader::createFromFile($path);
+                $reader = new Reader();
                 $reader->open($path);
 
                 $rowIndex = 0;
                 foreach ($reader->getSheetIterator() as $sheet) {
                     foreach ($sheet->getRowIterator() as $row) {
                         $rowIndex++;
+                        // Get row data as array
                         $rowData = [];
                         foreach ($row->getCells() as $cell) {
                             $rowData[] = $cell->getValue();
