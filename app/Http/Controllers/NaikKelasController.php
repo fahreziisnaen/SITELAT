@@ -6,7 +6,6 @@ use App\Models\Kelas;
 use App\Models\Murid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class NaikKelasController extends Controller
 {
@@ -33,52 +32,14 @@ class NaikKelasController extends Controller
             return $redirect;
         }
 
-        return view('naik-kelas.index');
-    }
+        // Ambil semua murid aktif dari semua kelas untuk ditampilkan di form
+        $murids = Murid::where('status', 'Aktif')
+            ->whereNotNull('kelas')
+            ->orderBy('kelas')
+            ->orderBy('nama_lengkap')
+            ->get();
 
-    /**
-     * Get semua murid aktif dari semua kelas untuk dipilih sebagai murid tetap.
-     */
-    public function getMuridTetap(Request $request)
-    {
-        // Check access - return JSON error jika bukan Admin
-        $user = auth()->user();
-        if (! $user || $user->role !== 'Admin') {
-            return response()->json([
-                'success' => false,
-                'error' => 'Anda tidak memiliki izin untuk mengakses halaman ini. Hanya Admin yang dapat mengakses.',
-            ], 403);
-        }
-
-        try {
-            // Ambil semua murid aktif dari semua kelas
-            $murids = Murid::where('status', 'Aktif')
-                ->whereNotNull('kelas')
-                ->orderBy('kelas')
-                ->orderBy('nama_lengkap')
-                ->get();
-
-            return response()->json([
-                'success' => true,
-                'murids' => $murids->map(function ($murid) {
-                    return [
-                        'NIS' => $murid->NIS,
-                        'nama_lengkap' => $murid->nama_lengkap,
-                        'gender' => $murid->gender,
-                        'kelas' => $murid->kelas,
-                    ];
-                }),
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error loading murid untuk naik kelas: '.$e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Terjadi kesalahan saat memuat data murid. Silakan coba lagi atau hubungi administrator.',
-            ], 500);
-        }
+        return view('naik-kelas.index', compact('murids'));
     }
 
     /**

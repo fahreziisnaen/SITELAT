@@ -88,7 +88,6 @@ Route::middleware('auth')->group(function () {
 
     // Naik Kelas
     Route::get('/naik-kelas', [NaikKelasController::class, 'index'])->name('naik-kelas.index');
-    Route::get('/naik-kelas/get-murid-tetap', [NaikKelasController::class, 'getMuridTetap'])->name('naik-kelas.get-murid-tetap');
     Route::post('/naik-kelas/process', [NaikKelasController::class, 'processNaikKelas'])->name('naik-kelas.process');
 });
 
