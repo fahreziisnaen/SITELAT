@@ -236,12 +236,17 @@
                 tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data murid...</td></tr>';
             }
 
-            const url = '{{ route('naik-kelas.get-murid-tetap') }}';
+            // Gunakan secure URL (HTTPS) untuk menghindari Mixed Content error
+            // Jika halaman di-load via HTTPS, semua request harus HTTPS juga
+            const url = '{{ secure_url(route('naik-kelas.get-murid-tetap')) }}';
+            
+            console.log('Fetching URL:', url);
             
             fetch(url, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 credentials: 'same-origin',
@@ -279,24 +284,40 @@
                 })
                 .catch(error => {
                     console.error('Error loading murid:', error);
-                    console.error('URL:', url);
+                    console.error('Error name:', error.name);
+                    console.error('Error message:', error.message);
+                    console.error('Error stack:', error.stack);
+                    console.error('URL yang dicoba:', url);
+                    console.error('Current location:', window.location.href);
                     
                     let errorMsg = 'Terjadi kesalahan saat memuat data murid.';
                     
                     // Handle specific error types
-                    if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                        errorMsg = 'Gagal terhubung ke server. Kemungkinan penyebab:\n\n' +
-                                   '1. Server tidak berjalan\n' +
+                    if (error.name === 'TypeError' && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+                        errorMsg = 'Gagal terhubung ke server.\n\n' +
+                                   'Kemungkinan penyebab:\n' +
+                                   '1. Server tidak berjalan atau tidak merespons\n' +
                                    '2. Koneksi internet terputus\n' +
-                                   '3. URL tidak valid\n\n' +
-                                   'Silakan refresh halaman dan coba lagi.';
+                                   '3. URL tidak valid atau tidak dapat diakses\n' +
+                                   '4. Masalah dengan session/authentication\n\n' +
+                                   'URL yang dicoba: ' + url + '\n\n' +
+                                   'Silakan:\n' +
+                                   '1. Refresh halaman (F5)\n' +
+                                   '2. Cek koneksi internet\n' +
+                                   '3. Cek console browser untuk detail error (F12)\n' +
+                                   '4. Hubungi administrator jika masalah berlanjut';
                     } else if (error.message) {
                         errorMsg = error.message;
                     }
                     
                     const tbody = document.getElementById('muridTableBody');
                     if (tbody) {
-                        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">${errorMsg}</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">
+                            <div class="space-y-2">
+                                <p class="font-semibold">${errorMsg.split('\n')[0]}</p>
+                                <p class="text-xs text-gray-600">Cek console browser (F12) untuk detail error</p>
+                            </div>
+                        </td></tr>`;
                     }
                     alert(errorMsg);
                 });
