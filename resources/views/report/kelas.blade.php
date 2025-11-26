@@ -59,7 +59,7 @@
                             <h4 class="text-sm font-semibold text-blue-800 mb-2">Anda adalah Walikelas:</h4>
                             <div class="flex flex-wrap gap-2">
                                 @php
-                                    $kelasWalikelas = \App\Models\Kelas::where('username', auth()->user()->username)->get();
+                                    $kelasWalikelas = \App\Models\Kelas::sortNatural(\App\Models\Kelas::where('username', auth()->user()->username)->get());
                                 @endphp
                                 @if($kelasWalikelas->isEmpty())
                                     <span class="text-sm text-gray-600">Tidak ada kelas yang dipegang</span>

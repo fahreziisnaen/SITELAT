@@ -156,11 +156,20 @@ class ReportController extends Controller
 
         try {
             // Query keterlambatan dengan snapshot kelas untuk pengelompokan yang benar
+            // Sort kelas dengan natural sort (X-1, X-2, ..., X-10, XI-1, ...)
             $keterlambatanQuery = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate])
                 ->whereNotNull('NIS')
                 ->whereNotNull('kelas') // Hanya ambil yang punya snapshot kelas
                 ->select('NIS', 'nama_murid', 'gender', 'kelas', 'tanggal')
-                ->orderBy('kelas')
+                ->orderByRaw("
+                    CASE 
+                        WHEN kelas LIKE 'X-%' THEN 1
+                        WHEN kelas LIKE 'XI-%' THEN 2
+                        WHEN kelas LIKE 'XII-%' THEN 3
+                        ELSE 4
+                    END,
+                    CAST(SUBSTRING_INDEX(kelas, '-', -1) AS UNSIGNED)
+                ")
                 ->orderBy('nama_murid')
                 ->orderBy('tanggal')
                 ->get();
@@ -617,7 +626,8 @@ class ReportController extends Controller
         }
 
         // Ambil kelas yang dipegang oleh Walikelas
-        $kelasWalikelas = Kelas::where('username', $user->username)->get();
+        // Sort kelas dengan natural sort
+        $kelasWalikelas = Kelas::sortNatural(Kelas::where('username', $user->username)->get());
 
         if ($kelasWalikelas->isEmpty()) {
             return redirect()->route('report.kelas')
@@ -657,12 +667,21 @@ class ReportController extends Controller
             $kelasNamesArray = $kelasWalikelas->pluck('kelas')->toArray();
 
             // Query keterlambatan dengan snapshot kelas yang dipegang oleh Walikelas
+            // Sort kelas dengan natural sort (X-1, X-2, ..., X-10, XI-1, ...)
             $keterlambatanQuery = Keterlambatan::whereBetween('tanggal', [$startDate, $endDate])
                 ->whereNotNull('NIS')
                 ->whereNotNull('kelas')
                 ->whereIn('kelas', $kelasNamesArray) // Filter hanya kelas yang dipegang
                 ->select('NIS', 'nama_murid', 'gender', 'kelas', 'tanggal')
-                ->orderBy('kelas')
+                ->orderByRaw("
+                    CASE 
+                        WHEN kelas LIKE 'X-%' THEN 1
+                        WHEN kelas LIKE 'XI-%' THEN 2
+                        WHEN kelas LIKE 'XII-%' THEN 3
+                        ELSE 4
+                    END,
+                    CAST(SUBSTRING_INDEX(kelas, '-', -1) AS UNSIGNED)
+                ")
                 ->orderBy('nama_murid')
                 ->orderBy('tanggal')
                 ->get();

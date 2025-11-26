@@ -222,11 +222,35 @@
     </div>
 
     <script>
+        // Enable submit button on page load if radio button is already selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioYa = document.getElementById('radioYa');
+            const radioTidak = document.getElementById('radioTidak');
+            
+            // Jika sudah ada radio yang terpilih (dari old input), enable submit button
+            if (radioYa && radioYa.checked) {
+                document.getElementById('btnSubmit').disabled = false;
+            } else if (radioTidak && radioTidak.checked) {
+                document.getElementById('btnSubmit').disabled = false;
+            }
+        });
+
         // Handle radio button selection
         document.getElementById('radioYa').addEventListener('change', function() {
             if (this.checked) {
                 document.getElementById('muridTetapSection').classList.remove('hidden');
                 document.getElementById('excludeInfo').classList.remove('hidden');
+                // Disable submit button - harus pilih murid dulu
+                document.getElementById('btnSubmit').disabled = true;
+                
+                // Cek apakah sudah ada murid yang dipilih sebelumnya (dari old input)
+                const existingInputs = document.querySelectorAll('#muridTetapInputs input[name="murid_tetap[]"]');
+                if (existingInputs.length > 0) {
+                    // Jika sudah ada pilihan sebelumnya, enable tombol
+                    document.getElementById('btnSubmit').disabled = false;
+                    document.getElementById('selectedMuridInfo').classList.remove('hidden');
+                    updateSelectedCount();
+                }
             }
         });
 
@@ -239,6 +263,8 @@
                 document.querySelectorAll('.murid-checkbox').forEach(cb => cb.checked = false);
                 updateMuridTetapInputs();
                 updateSelectedCount();
+                // Enable submit button
+                document.getElementById('btnSubmit').disabled = false;
             }
         });
 
@@ -351,6 +377,7 @@
             closeModal();
             updateMuridTetapInputs();
             updateSelectedCount();
+            // updateSelectedCount sudah handle enable/disable tombol berdasarkan jumlah murid yang dipilih
         });
 
         // Update hidden inputs untuk murid tetap
@@ -375,16 +402,26 @@
 
         // Update info murid yang dipilih di form utama
         function updateSelectedCount() {
-            const checkedBoxes = document.querySelectorAll('.murid-checkbox:checked');
-            const count = checkedBoxes.length;
+            // Gunakan hidden inputs untuk menghitung, bukan checkbox (karena checkbox mungkin tersembunyi saat search)
+            const hiddenInputs = document.querySelectorAll('#muridTetapInputs input[name="murid_tetap[]"]');
+            const count = hiddenInputs.length;
             const infoSection = document.getElementById('selectedMuridInfo');
             const countEl = document.getElementById('selectedCount');
+            const radioYa = document.getElementById('radioYa');
             
             if (count > 0) {
                 infoSection.classList.remove('hidden');
                 if (countEl) countEl.textContent = count;
+                // Jika pilih "Iya" dan sudah ada murid yang dipilih, enable submit button
+                if (radioYa && radioYa.checked) {
+                    document.getElementById('btnSubmit').disabled = false;
+                }
             } else {
                 infoSection.classList.add('hidden');
+                // Jika pilih "Iya" tapi belum ada murid yang dipilih, disable submit button
+                if (radioYa && radioYa.checked) {
+                    document.getElementById('btnSubmit').disabled = true;
+                }
             }
         }
 

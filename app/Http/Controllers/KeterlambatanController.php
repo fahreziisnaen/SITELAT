@@ -46,7 +46,7 @@ class KeterlambatanController extends Controller
         // Order dan paginate
         $keterlambatan = $query->orderBy('tanggal', 'desc')
             ->orderBy('waktu', 'desc')
-            ->paginate(10)
+            ->paginate(5)
             ->withQueryString(); // Preserve query string untuk pagination
 
         return view('keterlambatan.index', compact('keterlambatan', 'tanggal', 'namaMurid'));

@@ -33,9 +33,18 @@ class NaikKelasController extends Controller
         }
 
         // Ambil semua murid aktif dari semua kelas untuk ditampilkan di form
+        // Sort kelas dengan natural sort (X-1, X-2, ..., X-10, XI-1, ...)
         $murids = Murid::where('status', 'Aktif')
             ->whereNotNull('kelas')
-            ->orderBy('kelas')
+            ->orderByRaw("
+                CASE 
+                    WHEN kelas LIKE 'X-%' THEN 1
+                    WHEN kelas LIKE 'XI-%' THEN 2
+                    WHEN kelas LIKE 'XII-%' THEN 3
+                    ELSE 4
+                END,
+                CAST(SUBSTRING_INDEX(kelas, '-', -1) AS UNSIGNED)
+            ")
             ->orderBy('nama_lengkap')
             ->get();
 

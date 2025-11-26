@@ -49,6 +49,56 @@
 
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-4 sm:p-6 text-gray-900">
+                    <!-- Filter Form -->
+                    <form method="GET" action="{{ route('murid.index') }}" class="mb-6 bg-gray-50 rounded-lg p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Filter Kelas -->
+                            <div>
+                                <label for="kelas" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Filter Kelas
+                                </label>
+                                <select name="kelas" id="kelas" class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option value="">Semua Kelas</option>
+                                    @foreach($allKelas as $kelas)
+                                        <option value="{{ $kelas->kelas }}" {{ request('kelas') == $kelas->kelas ? 'selected' : '' }}>
+                                            {{ $kelas->kelas }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Filter Nama Murid -->
+                            <div>
+                                <label for="nama" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Cari Nama Murid
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="text" name="nama" id="nama" value="{{ request('nama') }}" 
+                                        placeholder="Cari nama murid..." 
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-4 flex flex-col sm:flex-row gap-2 sm:justify-end">
+                            <a href="{{ route('murid.index') }}" class="inline-flex items-center justify-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-colors">
+                                Reset
+                            </a>
+                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                Cari
+                            </button>
+                        </div>
+                    </form>
+
                     <div class="overflow-x-auto -mx-4 sm:mx-0">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gradient-to-r from-gray-50 to-gray-100">

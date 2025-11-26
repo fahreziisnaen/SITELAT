@@ -31,16 +31,31 @@ class MuridController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $redirect = $this->checkWalikelasAccess();
         if ($redirect) {
             return $redirect;
         }
 
-        $murids = Murid::with('kelasRelation')->orderBy('nama_lengkap')->paginate(10);
+        $query = Murid::with('kelasRelation');
 
-        return view('murid.index', compact('murids'));
+        // Filter by kelas
+        if ($request->filled('kelas')) {
+            $query->where('kelas', $request->kelas);
+        }
+
+        // Filter by nama murid
+        if ($request->filled('nama')) {
+            $query->where('nama_lengkap', 'like', '%'.$request->nama.'%');
+        }
+
+        $murids = $query->orderBy('nama_lengkap')->paginate(5)->withQueryString();
+
+        // Get all kelas for filter dropdown dengan natural sort
+        $allKelas = Kelas::sortNatural(Kelas::all());
+
+        return view('murid.index', compact('murids', 'allKelas'));
     }
 
     /**
@@ -53,7 +68,7 @@ class MuridController extends Controller
             return $redirect;
         }
 
-        $kelas = Kelas::orderBy('kelas')->get();
+        $kelas = Kelas::sortNatural(Kelas::all());
 
         return view('murid.create', compact('kelas'));
     }
@@ -116,7 +131,7 @@ class MuridController extends Controller
             return $redirect;
         }
 
-        $kelas = Kelas::orderBy('kelas')->get();
+        $kelas = Kelas::sortNatural(Kelas::all());
 
         return view('murid.edit', compact('murid', 'kelas'));
     }
