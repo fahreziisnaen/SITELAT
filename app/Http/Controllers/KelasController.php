@@ -59,8 +59,11 @@ class KelasController extends Controller
             return $redirect;
         }
 
-        // Tampilkan user dengan role Walikelas dan TATIB
-        $walikelas = User::whereIn('role', ['Walikelas', 'TATIB'])->orderBy('nama_lengkap')->get();
+        // Tampilkan user dengan role Walikelas dan TATIB yang belum memiliki kelas
+        $walikelas = User::whereIn('role', ['Walikelas', 'TATIB'])
+            ->whereDoesntHave('kelas')
+            ->orderBy('nama_lengkap')
+            ->get();
 
         return view('kelas.create', compact('walikelas'));
     }
@@ -79,6 +82,16 @@ class KelasController extends Controller
             'kelas' => ['required', 'string', 'max:255', 'unique:kelas'],
             'username' => ['nullable', Rule::exists('users', 'username')],
         ]);
+
+        // Validasi: Pastikan user yang dipilih belum memiliki kelas
+        if (! empty($validated['username'])) {
+            $userHasKelas = Kelas::where('username', $validated['username'])->exists();
+            if ($userHasKelas) {
+                return redirect()->back()
+                    ->withErrors(['username' => 'User yang dipilih sudah menjadi walikelas dari kelas lain.'])
+                    ->withInput();
+            }
+        }
 
         Kelas::create($validated);
 
@@ -110,8 +123,15 @@ class KelasController extends Controller
             return $redirect;
         }
 
-        // Tampilkan user dengan role Walikelas dan TATIB
-        $walikelas = User::whereIn('role', ['Walikelas', 'TATIB'])->orderBy('nama_lengkap')->get();
+        // Tampilkan user dengan role Walikelas dan TATIB yang belum memiliki kelas
+        // atau user yang sedang menjadi walikelas dari kelas ini (agar bisa tetap dipilih)
+        $walikelas = User::whereIn('role', ['Walikelas', 'TATIB'])
+            ->where(function ($query) use ($kela) {
+                $query->whereDoesntHave('kelas')
+                    ->orWhere('username', $kela->username);
+            })
+            ->orderBy('nama_lengkap')
+            ->get();
 
         return view('kelas.edit', compact('kela', 'walikelas'));
     }
@@ -130,6 +150,17 @@ class KelasController extends Controller
             'kelas' => ['required', 'string', 'max:255', Rule::unique('kelas')->ignore($kela->kelas, 'kelas')],
             'username' => ['nullable', Rule::exists('users', 'username')],
         ]);
+
+        // Validasi: Pastikan user yang dipilih belum memiliki kelas
+        // Kecuali jika user tersebut adalah walikelas saat ini dari kelas ini
+        if (! empty($validated['username']) && $validated['username'] !== $kela->username) {
+            $userHasKelas = Kelas::where('username', $validated['username'])->exists();
+            if ($userHasKelas) {
+                return redirect()->back()
+                    ->withErrors(['username' => 'User yang dipilih sudah menjadi walikelas dari kelas lain.'])
+                    ->withInput();
+            }
+        }
 
         $kela->update($validated);
 

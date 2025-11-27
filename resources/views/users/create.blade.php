@@ -81,7 +81,8 @@
                                     </svg>
                                 </div>
                                 <select id="role" name="role" required
-                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200">
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
+                                    onchange="toggleKelasField()">
                                     <option value="">Pilih Role</option>
                                     @if(in_array('Admin', $allowedRoles))
                                         <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
@@ -95,6 +96,29 @@
                                 </select>
                             </div>
                             <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                        </div>
+
+                        <!-- Kelas (hanya untuk Walikelas dan TATIB) -->
+                        <div id="kelasField" style="display: none;">
+                            <label for="kelas" class="block text-sm font-semibold text-gray-700 mb-2">Kelas <span class="text-gray-400 text-xs font-normal">(Pilih kelas yang akan dipegang oleh user ini)</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </div>
+                                <select id="kelas" name="kelas"
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200">
+                                    <option value="">Tidak Ada Kelas</option>
+                                    @foreach($kelasList as $kelas)
+                                        <option value="{{ $kelas->kelas }}" {{ old('kelas') == $kelas->kelas ? 'selected' : '' }}>
+                                            {{ $kelas->kelas }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Pilih kelas untuk user ini (opsional).</p>
+                            <x-input-error :messages="$errors->get('kelas')" class="mt-2" />
                         </div>
 
                         <!-- Password -->
@@ -148,4 +172,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleKelasField() {
+            const roleSelect = document.getElementById('role');
+            const kelasField = document.getElementById('kelasField');
+            const selectedRole = roleSelect.value;
+
+            if (selectedRole === 'Walikelas' || selectedRole === 'TATIB') {
+                kelasField.style.display = 'block';
+            } else {
+                kelasField.style.display = 'none';
+                // Reset kelas selection jika role bukan Walikelas/TATIB
+                document.getElementById('kelas').value = '';
+            }
+        }
+
+        // Tampilkan field kelas jika old role adalah Walikelas atau TATIB
+        document.addEventListener('DOMContentLoaded', function() {
+            const oldRole = '{{ old('role') }}';
+            if (oldRole === 'Walikelas' || oldRole === 'TATIB') {
+                toggleKelasField();
+            }
+        });
+    </script>
 </x-app-layout>

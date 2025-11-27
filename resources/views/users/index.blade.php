@@ -49,6 +49,7 @@
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nama Lengkap</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nomor Telepon</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Role</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Kelas</th>
                                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
@@ -73,6 +74,19 @@
                                                 {{ $user->role }}
                                             </span>
                                         </td>
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">
+                                            @if($user->kelas->count() > 0)
+                                                <div class="flex flex-wrap gap-1">
+                                                    @foreach($user->kelas as $kelas)
+                                                        <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium">
+                                                            {{ $kelas->kelas }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
+                                        </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
                                             <div class="flex flex-col sm:flex-row gap-2">
                                                 <a href="{{ route('users.edit', $user->username) }}" class="inline-flex items-center justify-center px-2 sm:px-3 py-1 sm:py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-lg transition-colors duration-200">
@@ -96,7 +110,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-12 text-center">
+                                        <td colspan="6" class="px-6 py-12 text-center">
                                             <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
                                             </svg>

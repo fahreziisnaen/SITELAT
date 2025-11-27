@@ -93,18 +93,14 @@
                                             <form action="{{ route('kelas.destroy', $kls->kelas) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
+                                                    @php
+                                                        $canDelete = $kls->murids_count == 0 && empty($kls->username);
+                                                    @endphp
                                                     <button type="submit" 
-                                                        class="inline-flex items-center justify-center w-full sm:w-auto px-2 sm:px-3 py-1 sm:py-1.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors duration-200 {{ $kls->murids_count > 0 ? 'opacity-50 cursor-not-allowed' : '' }}" 
-                                                        onclick="
-                                                            @if($kls->murids_count > 0)
-                                                                alert('Kelas ini tidak dapat dihapus karena masih memiliki {{ $kls->murids_count }} murid. Pindahkan atau hapus murid terlebih dahulu.'); 
-                                                                return false;
-                                                            @else
-                                                                return confirm('Yakin ingin menghapus kelas ini?');
-                                                            @endif
-                                                        "
-                                                        {{ $kls->murids_count > 0 ? 'disabled' : '' }}
-                                                        title="{{ $kls->murids_count > 0 ? 'Kelas tidak dapat dihapus karena masih memiliki murid' : 'Hapus kelas' }}">
+                                                        class="inline-flex items-center justify-center w-full sm:w-auto px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg transition-colors duration-200 {{ $canDelete ? 'bg-red-100 hover:bg-red-200 text-red-700' : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50' }}" 
+                                                        onclick="{{ $canDelete ? "return confirm('Yakin ingin menghapus kelas ini?');" : 'return false;' }}"
+                                                        {{ $canDelete ? '' : 'disabled' }}
+                                                        title="{{ $canDelete ? 'Hapus kelas' : ($kls->murids_count > 0 ? 'Kelas tidak dapat dihapus karena masih memiliki murid' : 'Kelas tidak dapat dihapus karena masih memiliki walikelas') }}">
                                                         <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                     </svg>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,7 +34,7 @@ class UserController extends Controller
         }
 
         $user = auth()->user();
-        $query = User::query();
+        $query = User::with('kelas');
 
         // Jika user adalah TATIB, sembunyikan user dengan role Admin
         if ($user->role === 'TATIB') {
@@ -63,7 +64,20 @@ class UserController extends Controller
             $allowedRoles = ['TATIB', 'Walikelas'];
         }
 
-        return view('users.create', compact('allowedRoles'));
+        // Load kelas yang tersedia (hanya kelas yang belum punya walikelas)
+        $kelasList = Kelas::whereNull('username')
+            ->orderByRaw("
+                CASE 
+                    WHEN kelas LIKE 'X-%' THEN 1
+                    WHEN kelas LIKE 'XI-%' THEN 2
+                    WHEN kelas LIKE 'XII-%' THEN 3
+                    ELSE 4
+                END,
+                CAST(SUBSTRING_INDEX(kelas, '-', -1) AS UNSIGNED)
+            ")
+            ->get();
+
+        return view('users.create', compact('allowedRoles', 'kelasList'));
     }
 
     /**
@@ -90,6 +104,7 @@ class UserController extends Controller
             'nama_lengkap' => ['required', 'string', 'max:255'],
             'nomor_telepon' => ['nullable', 'string', 'max:20'],
             'role' => ['required', Rule::in($allowedRoles)],
+            'kelas' => ['nullable', 'string', Rule::exists('kelas', 'kelas')],
         ]);
 
         // Double check: TATIB tidak boleh membuat Admin
@@ -97,9 +112,28 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['role' => 'Anda tidak memiliki izin untuk membuat user dengan role Admin.'])->withInput();
         }
 
+        // Validasi kelas sebelum create user
+        $kelasToAssign = $validated['kelas'] ?? null;
+        unset($validated['kelas']);
+
+        if (in_array($validated['role'], ['Walikelas', 'TATIB']) && ! empty($kelasToAssign)) {
+            // Validasi: Pastikan kelas yang dipilih belum punya walikelas
+            $kelas = Kelas::where('kelas', $kelasToAssign)->first();
+            if ($kelas && $kelas->username) {
+                return redirect()->back()
+                    ->withErrors(['kelas' => "Kelas {$kelasToAssign} sudah memiliki walikelas."])
+                    ->withInput();
+            }
+        }
+
         $validated['password'] = Hash::make($validated['password']);
 
-        User::create($validated);
+        $newUser = User::create($validated);
+
+        // Assign kelas jika role adalah Walikelas atau TATIB
+        if (in_array($validated['role'], ['Walikelas', 'TATIB']) && ! empty($kelasToAssign)) {
+            Kelas::where('kelas', $kelasToAssign)->update(['username' => $newUser->username]);
+        }
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
     }
@@ -153,7 +187,31 @@ class UserController extends Controller
             }
         }
 
-        return view('users.edit', compact('user', 'allowedRoles'));
+        // Load kelas yang tersedia untuk user dengan role Walikelas atau TATIB
+        $kelasList = collect();
+        if (in_array($user->role, ['Walikelas', 'TATIB']) || in_array('Walikelas', $allowedRoles) || in_array('TATIB', $allowedRoles)) {
+            // Hanya tampilkan kelas yang belum punya walikelas (username = null)
+            // atau kelas yang sedang dimiliki user ini (untuk bisa tetap dipilih saat edit)
+            $kelasList = Kelas::where(function ($query) use ($user) {
+                $query->whereNull('username')
+                    ->orWhere('username', $user->username);
+            })
+                ->orderByRaw("
+                    CASE 
+                        WHEN kelas LIKE 'X-%' THEN 1
+                        WHEN kelas LIKE 'XI-%' THEN 2
+                        WHEN kelas LIKE 'XII-%' THEN 3
+                        ELSE 4
+                    END,
+                    CAST(SUBSTRING_INDEX(kelas, '-', -1) AS UNSIGNED)
+                ")
+                ->get();
+        }
+
+        // Load kelas yang sedang dimiliki user untuk pre-select
+        $user->load('kelas');
+
+        return view('users.edit', compact('user', 'allowedRoles', 'kelasList'));
     }
 
     /**
@@ -190,6 +248,7 @@ class UserController extends Controller
             'nama_lengkap' => ['required', 'string', 'max:255'],
             'nomor_telepon' => ['nullable', 'string', 'max:20'],
             'role' => ['required', Rule::in($allowedRoles)],
+            'kelas' => ['nullable', 'string', Rule::exists('kelas', 'kelas')],
         ]);
 
         // Double check: TATIB tidak boleh mengubah menjadi Admin
@@ -203,7 +262,36 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
+        // Handle kelas assignment untuk Walikelas dan TATIB
+        $kelasToAssign = $validated['kelas'] ?? null;
+        unset($validated['kelas']);
+
+        // Validasi kelas sebelum update user
+        if (in_array($validated['role'], ['Walikelas', 'TATIB']) && ! empty($kelasToAssign)) {
+            // Validasi: Pastikan kelas yang dipilih belum punya walikelas (kecuali kelas yang sedang dimiliki user)
+            $kelas = Kelas::where('kelas', $kelasToAssign)->first();
+            if ($kelas && $kelas->username && $kelas->username !== $user->username) {
+                return redirect()->back()
+                    ->withErrors(['kelas' => "Kelas {$kelasToAssign} sudah memiliki walikelas."])
+                    ->withInput();
+            }
+        }
+
         $user->update($validated);
+
+        // Update kelas assignment
+        if (in_array($validated['role'], ['Walikelas', 'TATIB'])) {
+            // Hapus semua kelas yang sebelumnya dimiliki user ini
+            Kelas::where('username', $user->username)->update(['username' => null]);
+
+            // Assign kelas baru yang dipilih (jika ada)
+            if (! empty($kelasToAssign)) {
+                Kelas::where('kelas', $kelasToAssign)->update(['username' => $user->username]);
+            }
+        } else {
+            // Jika role bukan Walikelas/TATIB, hapus semua kelas assignment
+            Kelas::where('username', $user->username)->update(['username' => null]);
+        }
 
         return redirect()->route('users.index')->with('success', 'User berhasil diupdate.');
     }
@@ -223,6 +311,17 @@ class UserController extends Controller
         // Jika user adalah TATIB, tidak boleh menghapus user dengan role Admin
         if ($currentUser->role === 'TATIB' && $user->role === 'Admin') {
             return redirect()->route('users.index')->with('error', 'Anda tidak memiliki izin untuk menghapus user dengan role Admin.');
+        }
+
+        // Cek apakah user memiliki kelas (hanya untuk Walikelas dan TATIB)
+        if (in_array($user->role, ['Walikelas', 'TATIB'])) {
+            $kelasList = Kelas::where('username', $user->username)->get();
+            if ($kelasList->count() > 0) {
+                $kelasNames = $kelasList->pluck('kelas')->implode(', ');
+                $errorMessage = 'User masih menjadi walikelas dari kelas '.$kelasNames.'. Ubah walikelas di kelas tersebut sebelum menghapus user ini.';
+
+                return redirect()->route('users.index')->with('error', $errorMessage);
+            }
         }
 
         $user->delete();

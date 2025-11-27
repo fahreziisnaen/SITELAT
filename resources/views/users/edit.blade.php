@@ -69,6 +69,32 @@
                             <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-2" />
                         </div>
 
+                        <!-- Kelas (hanya untuk Walikelas dan TATIB, bukan Admin) -->
+                        @if($user->role !== 'Admin' && (in_array('Walikelas', $allowedRoles) || in_array('TATIB', $allowedRoles) || in_array($user->role, ['Walikelas', 'TATIB'])))
+                        <div>
+                            <label for="kelas" class="block text-sm font-semibold text-gray-700 mb-2">Kelas <span class="text-gray-400 text-xs font-normal">(Pilih kelas yang akan dipegang oleh user ini)</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </div>
+                                <select id="kelas" name="kelas"
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200">
+                                    <option value="">Tidak ada Kelas</option>
+                                    @foreach($kelasList as $kelas)
+                                        <option value="{{ $kelas->kelas }}" 
+                                            {{ old('kelas', $user->kelas->first()?->kelas) == $kelas->kelas ? 'selected' : '' }}>
+                                            {{ $kelas->kelas }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Pilih kelas untuk user ini</p>
+                            <x-input-error :messages="$errors->get('kelas')" class="mt-2" />
+                        </div>
+                        @endif
+
                         <!-- Role -->
                         <div>
                             <label for="role" class="block text-sm font-semibold text-gray-700 mb-2">Role</label>
