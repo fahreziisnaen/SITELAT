@@ -15,9 +15,9 @@
 
                         <!-- Nama Murid (Searchable Dropdown) -->
                         <div class="mb-4">
-                            <x-input-label for="NIS" :value="__('Nama Murid')" />
+                            <x-input-label for="NIS" :value="__('Nama Siswa')" />
                             <select id="NIS" name="NIS" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm select2-murid" required>
-                                <option value="">Pilih Murid</option>
+                                <option value="">Pilih Siswa</option>
                                 @foreach ($murids as $murid)
                                     <option value="{{ $murid->NIS }}" data-gender="{{ $murid->gender }}" {{ old('NIS', $keterlambatan->NIS) == $murid->NIS ? 'selected' : '' }}>
                                         {{ $murid->nama_lengkap }} - {{ $murid->kelas }}
@@ -112,7 +112,7 @@
         $(document).ready(function() {
             // Initialize Select2 with search
             $('.select2-murid').select2({
-                placeholder: 'Ketik untuk mencari murid...',
+                placeholder: 'Ketik untuk mencari siswa...',
                 allowClear: true,
                 width: '100%'
             });

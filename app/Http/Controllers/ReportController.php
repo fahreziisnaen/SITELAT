@@ -217,7 +217,7 @@ class ReportController extends Controller
                         ->where('kelas', $kelasName)
                         ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
                         ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
-                        ->orderBy('nama_lengkap')
+                ->orderBy('nama_lengkap')
                         ->get()
                         ->map(function ($murid) {
                             return [
@@ -726,16 +726,16 @@ class ReportController extends Controller
                         ->whereNotIn('NIS', $nisWithKeterlambatan) // Exclude yang sudah punya keterlambatan
                         ->select('NIS', 'nama_lengkap', 'gender', 'kelas')
                         ->orderBy('nama_lengkap')
-                        ->get()
+                ->get()
                         ->map(function ($murid) {
-                            return [
-                                'NIS' => $murid->NIS,
-                                'nama_lengkap' => $murid->nama_lengkap,
-                                'gender' => $murid->gender,
-                                'kelas' => $murid->kelas,
+                return [
+                    'NIS' => $murid->NIS,
+                    'nama_lengkap' => $murid->nama_lengkap,
+                    'gender' => $murid->gender,
+                    'kelas' => $murid->kelas,
                                 'tanggal_keterlambatan' => '', // Tidak ada keterlambatan
-                            ];
-                        });
+                ];
+            });
 
                     $dataByKelas[$kelasName] = $muridAktifKelas;
                 }
@@ -862,8 +862,8 @@ class ReportController extends Controller
                         '',
                         '',
                     ], $dataStyle));
-                }
-            }
+    }
+}
 
             // Baris kosong antara kelas
             $writer->addRow(Row::fromValues([]));

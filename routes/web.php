@@ -29,6 +29,16 @@ Route::get('/dashboard', function () {
         // Query base untuk keterlambatan
         $keterlambatanQuery = \App\Models\Keterlambatan::whereIn('kelas', $kelasIds);
 
+        // Top 5 murid dengan keterlambatan terbanyak bulan ini
+        $topKeterlambatan = (clone $keterlambatanQuery)
+            ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+            ->whereNotNull('NIS')
+            ->selectRaw('NIS, nama_murid, kelas, COUNT(*) as total_keterlambatan')
+            ->groupBy('NIS', 'nama_murid', 'kelas')
+            ->orderByDesc('total_keterlambatan')
+            ->take(5)
+            ->get();
+
         // Statistik untuk Walikelas - gunakan snapshot kelas
         $stats = [
             'total_kelas' => $kelasIds->count(),
@@ -39,10 +49,21 @@ Route::get('/dashboard', function () {
                 ->latest()
                 ->take(5)
                 ->get(),
+            'top_keterlambatan' => $topKeterlambatan,
         ];
     } else {
         // Query base untuk keterlambatan
         $keterlambatanQuery = \App\Models\Keterlambatan::query();
+
+        // Top 5 murid dengan keterlambatan terbanyak bulan ini
+        $topKeterlambatan = (clone $keterlambatanQuery)
+            ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+            ->whereNotNull('NIS')
+            ->selectRaw('NIS, nama_murid, kelas, COUNT(*) as total_keterlambatan')
+            ->groupBy('NIS', 'nama_murid', 'kelas')
+            ->orderByDesc('total_keterlambatan')
+            ->take(5)
+            ->get();
 
         // Statistik untuk Admin dan TATIB (semua data)
         $stats = [
@@ -54,6 +75,7 @@ Route::get('/dashboard', function () {
             'recent_keterlambatan' => \App\Models\Keterlambatan::latest()
                 ->take(5)
                 ->get(),
+            'top_keterlambatan' => $topKeterlambatan,
         ];
     }
 
@@ -64,24 +86,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); // Dinonaktifkan
-
+    
     // User Management
     Route::resource('users', UserController::class);
-
+    
     // Data Kelas
     Route::resource('kelas', KelasController::class);
-
+    
     // Data Murid
     // Import routes harus diletakkan sebelum resource route agar tidak tertangkap sebagai parameter
     Route::get('/murid/import', [MuridController::class, 'showImport'])->name('murid.import');
     Route::post('/murid/import', [MuridController::class, 'import'])->name('murid.import.store');
     Route::get('/murid/import/template', [MuridController::class, 'downloadTemplate'])->name('murid.import.template');
     Route::resource('murid', MuridController::class);
-
+    
     // Data Keterlambatan
     Route::resource('keterlambatan', KeterlambatanController::class);
     Route::get('/api/murid/{nis}', [KeterlambatanController::class, 'getMurid'])->name('api.murid');
-
+    
     // Report
     Route::get('/report', [ReportController::class, 'index'])->name('report.index');
     Route::get('/report/kelas', [ReportController::class, 'indexKelas'])->name('report.kelas');

@@ -268,7 +268,7 @@ class KeterlambatanController extends Controller
         if ($keterlambatan->bukti) {
             Storage::disk('public')->delete($keterlambatan->bukti);
         }
-
+        
         $keterlambatan->delete();
 
         return redirect()->route('keterlambatan.index')->with('success', 'Data keterlambatan berhasil dihapus.');

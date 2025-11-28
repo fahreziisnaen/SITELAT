@@ -14,9 +14,9 @@
 
                         <!-- Nama Murid (Searchable Dropdown) -->
                         <div class="mb-4">
-                            <x-input-label for="NIS" :value="__('Nama Murid')" />
+                            <x-input-label for="NIS" :value="__('Nama Siswa')" />
                             <select id="NIS" name="NIS" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm select2-murid" required>
-                                <option value="">Pilih Murid</option>
+                                <option value="">Pilih Siswa</option>
                                 @foreach ($murids as $murid)
                                     <option value="{{ $murid->NIS }}" data-gender="{{ $murid->gender }}" {{ old('NIS') == $murid->NIS ? 'selected' : '' }}>
                                         {{ $murid->nama_lengkap }} - {{ $murid->kelas }}
@@ -134,7 +134,7 @@
                             <input id="bukti" type="file" name="bukti" accept="image/*" class="hidden" />
                             
                             <x-input-error :messages="$errors->get('bukti')" class="mt-2" />
-                            <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB. Klik "Ambil Foto dari Kamera" untuk langsung memfoto murid.</p>
+                            <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB. Klik "Ambil Foto dari Kamera" untuk langsung memfoto siswa.</p>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
@@ -185,7 +185,7 @@
         $(document).ready(function() {
             // Initialize Select2 with search
             $('.select2-murid').select2({
-                placeholder: 'Ketik untuk mencari murid...',
+                placeholder: 'Ketik untuk mencari siswa...',
                 allowClear: true,
                 width: '100%'
             });

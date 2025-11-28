@@ -7,7 +7,7 @@
                 </svg>
                 Naik Kelas
             </h2>
-            <p class="text-xs sm:text-sm text-gray-600 mt-1">Proses kenaikan kelas dan kelulusan siswa untuk semua kelas</p>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Proses Kenaikan Kelas dan Kelulusan Siswa</p>
         </div>
     </x-slot>
 
@@ -47,7 +47,7 @@
                         <!-- Pertanyaan: Apakah ada murid yang tinggal kelas? -->
                         <div class="mb-6">
                             <label class="block text-base font-semibold text-gray-800 mb-4">
-                                Apakah ada murid yang tinggal kelas?
+                                Apakah ada siswa yang tinggal kelas?
                             </label>
                             <div class="flex gap-6">
                                 <label class="flex items-center cursor-pointer group">
@@ -70,8 +70,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                     </svg>
                                     <div class="flex-1">
-                                        <h4 class="text-sm font-semibold text-yellow-800 mb-1">Pilih Murid Tetap (Tinggal Kelas)</h4>
-                                        <p class="text-xs text-yellow-700">Pilih murid dari semua kelas yang tidak naik kelas</p>
+                                        <h4 class="text-sm font-semibold text-yellow-800 mb-1">Pilih Siswa Tetap (Tinggal Kelas)</h4>
+                                        <p class="text-xs text-yellow-700">Pilih siswa yang tidak naik kelas/lulus</p>
                                     </div>
                                     <button type="button" id="btnBukaModal" class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                     <p class="text-sm text-gray-700">
-                                        <span class="font-semibold text-indigo-600" id="selectedCount">0</span> murid dipilih sebagai murid tetap (tinggal kelas)
+                                        <span class="font-semibold text-indigo-600" id="selectedCount">0</span> siswa dipilih sebagai siswa tetap (tinggal kelas)
                                     </p>
                                 </div>
                             </div>
@@ -112,11 +112,11 @@
                                 <div class="flex-1">
                                     <p class="font-semibold text-blue-900 mb-1">Informasi Proses:</p>
                                     <ul class="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                                        <li>Semua murid di semua kelas akan dinaikkan/luluskan</li>
+                                        <li>Semua siswa di semua kelas akan dinaikkan/luluskan</li>
                                         <li>Kelas X-* akan naik ke XI-*</li>
                                         <li>Kelas XI-* akan naik ke XII-*</li>
                                         <li>Kelas XII-* akan lulus</li>
-                                        <li id="excludeInfo" class="hidden">Murid yang dipilih sebagai murid tetap akan tetap di kelas yang sama</li>
+                                        <li id="excludeInfo" class="hidden">Siswa yang dipilih sebagai siswa tetap akan tetap di kelas yang sama</li>
                                     </ul>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@
                     <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
-                    Pilih Murid Tetap (Tinggal Kelas) - Semua Kelas
+                    Pilih Siswa Tetap (Tinggal Kelas) - Semua Kelas
                 </h3>
                 <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +175,7 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <p class="mt-4 text-sm text-gray-500">Ketik nama, NIS, atau kelas untuk mencari murid</p>
+                    <p class="mt-4 text-sm text-gray-500">Ketik nama, NIS, atau kelas untuk mencari siswa</p>
                 </div>
                 
                 <div id="muridList" class="space-y-2 hidden">
@@ -196,18 +196,18 @@
                             </div>
                         </label>
                     @empty
-                        <p class="text-sm text-gray-500 text-center py-4">Tidak ada murid aktif</p>
+                        <p class="text-sm text-gray-500 text-center py-4">Tidak ada siswa aktif</p>
                     @endforelse
                 </div>
                 
                 <div id="noResults" class="hidden text-center py-8">
-                    <p class="text-sm text-gray-500">Tidak ada murid yang ditemukan</p>
+                    <p class="text-sm text-gray-500">Tidak ada siswa yang ditemukan</p>
                 </div>
             </div>
 
             <div class="mt-4 flex justify-between items-center">
                 <div class="text-sm text-gray-600">
-                    Total dipilih: <span id="modalSelectedCountBottom" class="font-semibold text-indigo-600">0</span> murid
+                    Total dipilih: <span id="modalSelectedCountBottom" class="font-semibold text-indigo-600">0</span> siswa
                 </div>
                 <div class="flex gap-3">
                     <button type="button" id="cancelModal" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors">

@@ -7,7 +7,7 @@
                 </svg>
             </a>
             <div>
-                <h2 class="font-bold text-2xl text-gray-800 leading-tight">Tambah Murid</h2>
+                <h2 class="font-bold text-2xl text-gray-800 leading-tight">Tambah Siswa</h2>
                 <p class="text-sm text-gray-600 mt-1">Tambahkan siswa baru ke sistem</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
-                    <h3 class="text-lg font-semibold text-white">Form Tambah Murid</h3>
+                    <h3 class="text-lg font-semibold text-white">Form Tambah Siswa</h3>
                 </div>
                 <div class="p-8">
                     <form method="POST" action="{{ route('murid.store') }}" class="space-y-6">
@@ -50,7 +50,7 @@
                                 </div>
                                 <input id="nama_lengkap" type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required
                                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
-                                    placeholder="Masukkan nama lengkap">
+                                    placeholder="Masukkan Nama Lengkap Siswa">
                             </div>
                             <x-input-error :messages="$errors->get('nama_lengkap')" class="mt-2" />
                         </div>

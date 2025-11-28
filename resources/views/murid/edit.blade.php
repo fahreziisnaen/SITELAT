@@ -7,8 +7,8 @@
                 </svg>
             </a>
             <div>
-                <h2 class="font-bold text-2xl text-gray-800 leading-tight">Edit Murid</h2>
-                <p class="text-sm text-gray-600 mt-1">Update informasi siswa</p>
+                <h2 class="font-bold text-2xl text-gray-800 leading-tight">Edit Siswa</h2>
+                <p class="text-sm text-gray-600 mt-1">Update Informasi Siswa</p>
             </div>
         </div>
     </x-slot>
@@ -17,7 +17,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
-                    <h3 class="text-lg font-semibold text-white">Form Edit Murid</h3>
+                    <h3 class="text-lg font-semibold text-white">Form Edit Siswa</h3>
                 </div>
                 <div class="p-8">
                     <form method="POST" action="{{ route('murid.update', $murid->NIS) }}" class="space-y-6">

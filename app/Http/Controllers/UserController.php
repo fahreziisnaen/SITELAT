@@ -26,7 +26,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $redirect = $this->checkWalikelasAccess();
         if ($redirect) {
@@ -41,7 +41,12 @@ class UserController extends Controller
             $query->where('role', '!=', 'Admin');
         }
 
-        $users = $query->orderBy('username')->paginate(10);
+        // Filter berdasarkan nama lengkap
+        if ($request->filled('nama')) {
+            $query->where('nama_lengkap', 'like', '%'.$request->nama.'%');
+        }
+
+        $users = $query->orderBy('username')->paginate(5);
 
         return view('users.index', compact('users'));
     }
