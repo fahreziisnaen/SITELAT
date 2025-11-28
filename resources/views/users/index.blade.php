@@ -99,23 +99,23 @@
                                     <tr class="hover:bg-indigo-50 transition-colors duration-200">
                                         <!-- Desktop View: Separate Columns -->
                                         <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap hidden md:table-cell">
-                                            <span class="font-mono text-xs sm:text-sm bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">{{ $user->username }}</span>
+                                            <span class="font-mono text-sm sm:text-base bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">{{ $user->username }}</span>
                                         </td>
                                         <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 min-w-0 hidden md:table-cell">
-                                            <span class="text-xs sm:text-sm text-gray-900 break-words" title="{{ $user->nama_lengkap }}">{{ $user->nama_lengkap }}</span>
+                                            <span class="font-bold text-sm sm:text-base text-gray-900 break-words" title="{{ $user->nama_lengkap }}">{{ $user->nama_lengkap }}</span>
                                         </td>
                                         <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap hidden md:table-cell">
-                                            <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 inline-flex text-xs leading-4 font-semibold rounded-full shadow-sm
+                                            <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 inline-flex text-sm sm:text-base leading-4 font-semibold rounded-full shadow-sm
                                                 {{ $user->role === 'Admin' ? 'bg-gradient-to-r from-green-400 to-green-500 text-white' : ($user->role === 'TATIB' ? 'bg-gradient-to-r from-purple-400 to-purple-500 text-white' : 'bg-gradient-to-r from-blue-400 to-blue-500 text-white') }}">
                                                 {{ $user->role }}
                                             </span>
                                         </td>
-                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm text-gray-700 text-left hidden md:table-cell">{{ $user->nomor_telepon ?? '-' }}</td>
-                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-700 text-right hidden md:table-cell">
+                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base text-gray-700 text-left hidden md:table-cell">{{ $user->nomor_telepon ?? '-' }}</td>
+                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-sm sm:text-base text-gray-700 text-right hidden md:table-cell">
                                             @if($user->kelas->count() > 0)
                                                 <div class="flex flex-wrap gap-1 justify-end">
                                                     @foreach($user->kelas as $kelas)
-                                                        <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium text-xs">
+                                                        <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium text-sm">
                                                             {{ $kelas->kelas }}
                                                         </span>
                                                     @endforeach
@@ -152,10 +152,10 @@
                                                     </svg>
                                                 </div>
                                                 <div class="flex flex-col min-w-0 flex-1 break-words gap-0.5">
-                                                    <span class="font-semibold text-xs sm:text-sm text-gray-900 break-words leading-tight" title="{{ $user->nama_lengkap }}">{{ $user->nama_lengkap }}</span>
-                                                    <span class="text-xs text-gray-500 font-mono break-words">{{ $user->username }}</span>
-                                                    <span class="text-xs text-gray-500">
-                                                        <span class="px-1.5 py-0.5 inline-flex text-xs leading-4 font-semibold rounded-full
+                                                    <span class="font-bold text-sm sm:text-base text-gray-900 break-words leading-tight" title="{{ $user->nama_lengkap }}">{{ $user->nama_lengkap }}</span>
+                                                    <span class="text-sm text-gray-500 font-mono break-words">{{ $user->username }}</span>
+                                                    <span class="text-sm text-gray-500">
+                                                        <span class="px-1.5 py-0.5 inline-flex text-sm leading-4 font-semibold rounded-full
                                                             {{ $user->role === 'Admin' ? 'bg-green-100 text-green-700' : ($user->role === 'TATIB' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700') }}">
                                                             {{ $user->role }}
                                                         </span>
@@ -163,12 +163,12 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm text-gray-700 text-left md:hidden">{{ $user->nomor_telepon ?? '-' }}</td>
-                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-700 text-right md:hidden">
+                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base text-gray-700 text-left md:hidden">{{ $user->nomor_telepon ?? '-' }}</td>
+                                        <td class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-sm sm:text-base text-gray-700 text-right md:hidden">
                                             @if($user->kelas->count() > 0)
                                                 <div class="flex flex-wrap gap-1 justify-end">
                                                     @foreach($user->kelas as $kelas)
-                                                        <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium text-center">
+                                                        <span class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium text-sm text-center">
                                                             {{ $kelas->kelas }}
                                                         </span>
                                                     @endforeach
