@@ -1,6 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <!-- Mobile View - Centered and Attractive -->
+        <div class="md:hidden text-center">
+            <div class="flex items-center justify-center">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full p-2.5 mr-3">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-extrabold text-white drop-shadow-lg">
+                    Dashboard
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:flex md:items-center md:justify-between">
             <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight">
                 Dashboard
             </h2>
@@ -98,7 +113,7 @@
                             </svg>
                         </div>
                         <div class="text-center sm:text-left">
-                            <p class="font-semibold text-xs sm:text-sm md:text-base text-gray-800">Lihat Report</p>
+                            <p class="font-semibold text-xs sm:text-sm md:text-base text-gray-800">Laporan Semester</p>
                             <p class="text-xs sm:text-sm text-gray-600 hidden sm:block">Rekap Keterlambatan Siswa</p>
                         </div>
                     </a>
@@ -110,7 +125,7 @@
                             </svg>
                         </div>
                         <div class="text-center sm:text-left">
-                            <p class="font-semibold text-xs sm:text-sm md:text-base text-gray-800">Data Murid</p>
+                            <p class="font-semibold text-xs sm:text-sm md:text-base text-gray-800">Data Siswa<br>Aktif</p>
                             <p class="text-xs sm:text-sm text-gray-600 hidden sm:block">Kelola Data Siswa</p>
                         </div>
                     </a>
@@ -125,14 +140,14 @@
                     </svg>
                     Siswa dengan Keterlambatan Terbanyak ({{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F Y') }})
                 </h3>
-                <div class="w-full overflow-hidden">
-                    <table class="w-full divide-y divide-gray-200" style="table-layout: fixed; width: 100%;">
+                <div class="w-full overflow-x-auto">
+                    <table class="w-full divide-y divide-gray-200 min-w-full" style="table-layout: fixed; width: 100%;">
                         <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                             <tr>
-                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-0" style="width: 45%;">Nama Siswa</th>
+                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-0" style="width: 50%; min-width: 120px;">Nama Siswa</th>
                                 <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider hidden md:table-cell" style="width: 15%;">NIS</th>
-                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider" style="width: 15%;">Kelas</th>
-                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap" style="width: 25%;">Total</th>
+                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider" style="width: 20%; min-width: 60px;">Kelas</th>
+                                <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap" style="width: 30%; min-width: 70px;">Total</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -158,7 +173,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-3 sm:px-6 py-4 text-center text-xs sm:text-sm text-gray-500">Belum ada data keterlambatan bulan ini</td>
+                                    <td colspan="4" class="px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 text-center w-full">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <svg class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto text-gray-300 mb-2 sm:mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                            </svg>
+                                            <p class="text-gray-500 font-medium text-xs sm:text-sm md:text-base px-2">Belum ada data keterlambatan bulan ini</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -174,14 +196,14 @@
                     </svg>
                     Keterlambatan Terbaru
                 </h3>
-                <div class="w-full overflow-hidden">
-                    <table class="w-full" style="table-layout: fixed; width: 100%;">
+                <div class="w-full overflow-x-auto">
+                    <table class="w-full min-w-full" style="table-layout: fixed; width: 100%;">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 20%;">Tanggal</th>
-                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0" style="width: 50%;">Nama Siswa</th>
-                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">Kelas</th>
-                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">Waktu</th>
+                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 25%; min-width: 80px;">Tanggal</th>
+                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0" style="width: 40%; min-width: 120px;">Nama Siswa</th>
+                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 18%; min-width: 60px;">Kelas</th>
+                                <th class="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 17%; min-width: 60px;">Waktu</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -196,7 +218,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-3 sm:px-6 py-4 text-center text-xs sm:text-sm text-gray-500">Belum ada data keterlambatan</td>
+                                    <td colspan="4" class="px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 text-center w-full">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <svg class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto text-gray-300 mb-2 sm:mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <p class="text-gray-500 font-medium text-xs sm:text-sm md:text-base px-2">Belum ada data keterlambatan</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SILAMBAT - SMAN 21 KOTA SURABAYA</title>
+    <title>SIKETSA - SMAN 21 KOTA SURABAYA</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -16,10 +16,10 @@
         <!-- Logo/Header -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-20 h-20 bg-transparent rounded-full mb-4">
-                <img src="{{ asset('images/sman21surabaya.png') }}" alt="SILAMBAT" class="w-full h-full object-contain">
+                <img src="{{ asset('images/sman21surabaya.png') }}" alt="SIKETSA" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">SILAMBAT</h1>
-            <p class="text-indigo-100">Sistem Rekap Keterlambatan Siswa</p>
+            <h1 class="text-3xl font-bold text-white mb-2">SIKETSA</h1>
+            <p class="text-indigo-100">Sistem Keterlambatan Siswa</p>
         </div>
 
         <!-- Login Card -->
@@ -98,10 +98,20 @@
 
         <!-- Copyright -->
         <div class="text-center mt-8">
-            <p class="text-white text-sm">
-                © {{ date('Y') }}. SMAN 21 Kota Surabaya. All rights reserved.
-            </p>
-        </div>
+         <p class="text-white text-sm">
+            © {{ date('Y') }} - SMAN 21 Kota Surabaya. All rights reserved.
+            <br>
+        <span class="flex items-center justify-center gap-1 mt-1">
+            Developed by 
+            <a href="https://github.com/fahreziisnaen" target="_blank" class="inline-flex items-center">
+                <img src="{{ asset('images/frz_sign.png') }}"
+                     alt="FRZ Sign"
+                     class="h-4">
+            </a>
+        </span>
+    </p>
+</div>
+
     </div>
 </body>
 </html>

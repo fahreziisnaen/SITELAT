@@ -1,31 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div>
-                <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Mobile View - Centered and Attractive -->
+        <div class="md:hidden text-center">
+            <div class="flex items-center justify-center">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full p-2.5 mr-3">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
-                    Data Siswa
+                </div>
+                <h2 class="text-2xl font-extrabold text-white drop-shadow-lg">
+                    Siswa
                 </h2>
-                <p class="text-xs sm:text-sm text-gray-600 mt-1">Kelola Data Siswa</p>
             </div>
-            <div class="flex flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-                <a href="{{ route('murid.import') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                    </svg>
-                    <span class="hidden sm:inline">Import</span>
-                    <span class="sm:hidden">Import</span>
-                </a>
-                <a href="{{ route('murid.create') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:block">
+            <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
+                <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
-                    <span class="hidden sm:inline">Tambah Siswa</span>
-                    <span class="sm:hidden">Tambah</span>
-            </a>
-            </div>
+                Data Siswa
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Kelola Data Siswa</p>
         </div>
     </x-slot>
 
@@ -39,6 +36,24 @@
                     <span class="font-medium">{{ session('success') }}</span>
                 </div>
             @endif
+
+            <!-- Action Buttons -->
+            <div class="mb-4 sm:mb-6 flex flex-row gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-end">
+                <a href="{{ route('murid.import') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                    <span class="hidden sm:inline">Import</span>
+                    <span class="sm:hidden">Import</span>
+                </a>
+                <a href="{{ route('murid.create') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span class="hidden sm:inline">Tambah Siswa</span>
+                    <span class="sm:hidden">Tambah</span>
+                </a>
+            </div>
 
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-4 sm:p-6 text-gray-900">
@@ -92,15 +107,15 @@
                         </div>
                     </form>
 
-                    <div class="w-full overflow-hidden">
-                        <table class="w-full divide-y divide-gray-200" style="table-layout: fixed; width: 100%;">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full divide-y divide-gray-200 min-w-full" style="table-layout: fixed; width: 100%;">
                                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                                     <tr>
-                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-0" style="width: 45%;">Nama Siswa</th>
+                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-0" style="width: 45%; min-width: 120px;">Nama Siswa</th>
                                         <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider hidden md:table-cell" style="width: 15%;">NIS</th>
                                         <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider hidden lg:table-cell" style="width: 15%;">Jenis Kelamin</th>
-                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider" style="width: 10%;">Kelas</th>
-                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap" style="width: 15%;">Aksi</th>
+                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider" style="width: 15%; min-width: 60px;">Kelas</th>
+                                        <th class="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap" style="width: 15%; min-width: 80px;">Aksi</th>
                                     </tr>
                                 </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -158,12 +173,14 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-12 text-center">
-                                            <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                            </svg>
-                                            <p class="text-gray-500 font-medium">Tidak ada data siswa</p>
-                                            <p class="text-gray-400 text-sm mt-1">Klik tombol "Tambah Siswa" untuk menambahkan data</p>
+                                        <td colspan="5" class="px-2 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 text-center w-full">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <svg class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto text-gray-300 mb-2 sm:mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                                </svg>
+                                                <p class="text-gray-500 font-medium text-xs sm:text-sm md:text-base px-2">Tidak ada data siswa</p>
+                                                <p class="text-gray-400 text-xs sm:text-sm mt-1 px-3 max-w-xs sm:max-w-none">Klik tombol "Tambah Siswa" untuk menambahkan data</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforelse

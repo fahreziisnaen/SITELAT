@@ -1,21 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div>
-                <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Mobile View - Centered and Attractive -->
+        <div class="md:hidden text-center">
+            <div class="flex items-center justify-center">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full p-2.5 mr-3">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    Data Kelas
+                </div>
+                <h2 class="text-2xl font-extrabold text-white drop-shadow-lg">
+                    Kelas
                 </h2>
-                <p class="text-xs sm:text-sm text-gray-600 mt-1">Kelola Data Kelas</p>
             </div>
-            <a href="{{ route('kelas.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:block">
+            <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
+                <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
-                Tambah Kelas
-            </a>
+                Data Kelas
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Kelola Data Kelas</p>
         </div>
     </x-slot>
 
@@ -39,12 +46,18 @@
                 </div>
             @endif
 
+            <!-- Action Buttons -->
+            <div class="mb-4 sm:mb-6 flex justify-center sm:justify-end">
+                <a href="{{ route('kelas.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Kelas
+                </a>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-4 sm:p-6 text-gray-900">
-                    <div class="mb-6">
-                        {{ $kelas->links() }}
-                    </div>
-                    
                     <div class="w-full overflow-hidden">
                         <table class="w-full divide-y divide-gray-200" style="table-layout: fixed; width: 100%;">
                             <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
@@ -189,6 +202,10 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="mt-6">
+                        {{ $kelas->links() }}
                     </div>
                 </div>
             </div>

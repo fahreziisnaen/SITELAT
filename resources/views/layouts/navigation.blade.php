@@ -7,10 +7,10 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center space-x-2 sm:space-x-3 group">
                         <div class="bg-transparent rounded-lg p-1.5 sm:p-2 group-hover:scale-110 transition-transform duration-200">
-                            <img src="{{ asset('images/sman21surabaya.png') }}" alt="SILAMBAT" class="object-contain w-8 h-8 sm:w-10 sm:h-auto">
+                            <img src="{{ asset('images/sman21surabaya.png') }}" alt="SIKETSA" class="object-contain w-8 h-8 sm:w-10 sm:h-auto">
                         </div>
                         <span class="text-white font-bold text-xs sm:text-sm md:text-base lg:text-lg hidden lg:block leading-tight tracking-tight group-hover:scale-110 transition-transform duration-200">
-                            SILAMBAT
+                            SIKETSA
                         </span>
                     </a>
                 </div>

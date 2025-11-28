@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>SILAMBAT - SMAN 21 KOTA SURABAYA</title>
+        <title>SIKETSA - SMAN 21 KOTA SURABAYA</title>
 
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">

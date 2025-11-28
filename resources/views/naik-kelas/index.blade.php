@@ -1,6 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
+        <!-- Mobile View - Centered and Attractive -->
+        <div class="md:hidden text-center">
+            <div class="flex items-center justify-center">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full p-2.5 mr-3">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-extrabold text-white drop-shadow-lg">
+                    Naik Kelas
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:block">
             <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
                 <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
