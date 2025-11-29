@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <!-- Mobile View - Centered and Attractive -->
-        <div class="md:hidden text-center">
-            <div class="flex items-center justify-center">
-                <div class="bg-white/20 backdrop-blur-sm rounded-full p-2.5 mr-3">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        <!-- Mobile View - Left Aligned and Uppercase -->
+        <div class="md:hidden">
+            <div class="flex items-center">
+                <div class="bg-white/25 backdrop-blur-md rounded-xl p-2.5 sm:p-3 mr-3 sm:mr-4 shrink-0 shadow-lg ring-2 ring-white/20">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-extrabold text-white drop-shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-black text-white drop-shadow-2xl uppercase tracking-wide">
                     Pengguna
                 </h2>
             </div>

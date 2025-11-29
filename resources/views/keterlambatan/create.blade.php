@@ -1,8 +1,25 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Data Keterlambatan') }}
-        </h2>
+        <!-- Mobile View - Left Aligned and Uppercase -->
+        <div class="md:hidden">
+            <div class="flex items-center">
+                <div class="bg-white/25 backdrop-blur-md rounded-xl p-2.5 sm:p-3 mr-3 sm:mr-4 shrink-0 shadow-lg ring-2 ring-white/20">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-black text-white drop-shadow-2xl uppercase tracking-wide">
+                    Tambah Keterlambatan
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:flex md:items-center md:justify-between">
+            <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight">
+                {{ __('Tambah Data Keterlambatan') }}
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -36,12 +53,9 @@
                         <div class="mb-4">
                             <x-input-label for="tanggal" :value="__('Tanggal')" />
                             @php
-                                // Only use old value if it exists (from validation error), otherwise use today
+                                // Hanya gunakan nilai lama jika ada (dari validation error)
                                 $tanggalHiddenValue = old('tanggal');
                                 $hasOldValue = old('tanggal') !== null;
-                                if (!$hasOldValue) {
-                                    $tanggalHiddenValue = \Carbon\Carbon::today()->format('Y-m-d');
-                                }
                             @endphp
                             <x-text-input id="tanggal" class="block mt-1 w-full" type="text" name="tanggal_display" placeholder="DD/MM/YYYY" required />
                             <input type="hidden" id="tanggal_hidden" name="tanggal" value="{{ $tanggalHiddenValue }}" required />
@@ -53,7 +67,7 @@
                         <!-- Waktu -->
                         <div class="mb-4">
                             <x-input-label for="waktu" :value="__('Waktu')" />
-                            <x-text-input id="waktu" class="block mt-1 w-full" type="time" name="waktu" :value="old('waktu', date('H:i'))" required />
+                            <x-text-input id="waktu" class="block mt-1 w-full" type="time" name="waktu" :value="old('waktu')" required />
                             <x-input-error :messages="$errors->get('waktu')" class="mt-2" />
                         </div>
 
@@ -202,7 +216,7 @@
                 $('#NIS').trigger('change');
             }
 
-            // Initialize Flatpickr for date picker with Indonesian format
+            // Initialize Flatpickr for date picker with Indonesian format (gunakan waktu device)
             const tanggalInput = document.getElementById('tanggal');
             const tanggalHidden = document.getElementById('tanggal_hidden');
             const hasOldValueInput = document.getElementById('has_old_value');
@@ -247,7 +261,7 @@
                 }
             });
             
-            // Force set today after initialization if no old value
+            // Force set today (device) after initialization jika tidak ada old value
             if (!hasOldValue) {
                 // Immediately set to today
                 flatpickrInstance.setDate(today, false);
@@ -258,6 +272,15 @@
                     flatpickrInstance.setDate(today, false);
                     tanggalHidden.value = todayString;
                 }, 50);
+            }
+
+            // Set default waktu berdasarkan waktu device jika tidak ada old value
+            const waktuInput = document.getElementById('waktu');
+            if (waktuInput && !waktuInput.value) {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                waktuInput.value = hours + ':' + minutes;
             }
 
             // Handle image preview and camera/gallery selection

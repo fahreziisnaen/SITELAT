@@ -1,6 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <!-- Mobile View - Left Aligned and Uppercase -->
+        <div class="md:hidden">
+            <div class="flex items-center">
+                <div class="bg-white/25 backdrop-blur-md rounded-xl p-2.5 sm:p-3 mr-3 sm:mr-4 shrink-0 shadow-lg ring-2 ring-white/20">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-black text-white drop-shadow-2xl uppercase tracking-wide">
+                    Import Siswa
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Desktop View - Original Layout -->
+        <div class="hidden md:flex md:items-center md:justify-between">
             <div>
                 <h2 class="font-bold text-xl sm:text-2xl text-gray-800 leading-tight flex items-center">
                     <svg class="w-6 h-6 sm:w-7 sm:h-7 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

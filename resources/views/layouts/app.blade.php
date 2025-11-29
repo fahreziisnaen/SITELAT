@@ -29,16 +29,29 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="mobile-header-gradient relative overflow-hidden">
+                <header class="mobile-header-gradient">
                     <style>
                         header.mobile-header-gradient {
                             background: linear-gradient(to right, #4f46e5, #9333ea, #4f46e5);
-                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+                        }
+                        @media (max-width: 767px) {
+                            header.mobile-header-gradient {
+                                position: sticky;
+                                top: 0;
+                                z-index: 50;
+                                will-change: transform;
+                                transform: translateZ(0);
+                                -webkit-transform: translateZ(0);
+                                backface-visibility: hidden;
+                                -webkit-backface-visibility: hidden;
+                            }
                         }
                         @media (min-width: 768px) {
                             header.mobile-header-gradient {
                                 background: white !important;
                                 box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+                                position: relative;
                             }
                         }
                         @media (max-width: 767px) {
@@ -62,11 +75,12 @@
                         }
                     </style>
                     <!-- Decorative elements for mobile -->
-                    <div class="absolute inset-0 md:hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                    <div class="absolute inset-0 md:hidden overflow-hidden">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-xl"></div>
+                        <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16 blur-xl"></div>
+                        <div class="absolute top-1/2 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
                     </div>
-                    <div class="max-w-7xl mx-auto py-4 md:py-6 px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="max-w-7xl mx-auto py-4 sm:py-5 md:py-6 px-4 sm:px-6 lg:px-8 relative z-10">
                         <div class="mobile-header-content">
                             {{ $header }}
                         </div>
